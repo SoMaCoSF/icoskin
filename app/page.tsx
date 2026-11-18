@@ -1,4 +1,5 @@
 import Simulator from './Simulator';
+import Chladni from './Chladni';
 import { counts } from '../lib/ico';
 
 function TopoTable() {
@@ -80,6 +81,32 @@ export default function Home() {
       </div>
 
       <Simulator />
+
+      <section className="brief">
+        <h2>FIGURES — THE DESIGN AS DRAWN</h2>
+        <p className="lede">
+          Concept schematics from the design study. They are design communication, not engineering
+          drawings — every load-bearing claim on this page is graded in §3 and referenced in §10.
+        </p>
+        <div className="gallery">
+          <figure className="fig">
+            <img src="/img/multi-shell.webp" alt="Icospheric multi-shell smart compute skin schematic" />
+            <figcaption><b>Multi-shell icosphere.</b> Nested geodesic CNT lattice shells (A–C) with vacuum-sealed aerogel interstitials, Fe-MG core-memory nodes at the vertices, and the cymatic-patterned carbon-copper micro-coil at face scale.</figcaption>
+          </figure>
+          <figure className="fig">
+            <img src="/img/fab-facility.webp" alt="Icospheric multi-shell fabrication facility schematic" />
+            <figcaption><b>Fabrication.</b> (A) Vacuum cymatic resin bath — multi-frequency transducer arrays form the standing-wave mask while metal-coated CNTs and metallic-glass particles align. (B) Multi-layer casting and shell build-up with aerogel infiltration grout. (C) The final composite: tile-node architecture, B-10/Ga-71 doped core, evacuated vacuum pockets.</figcaption>
+          </figure>
+          <figure className="fig">
+            <img src="/img/exploded-layers.webp" alt="Exploded layers of the smart compute skin" />
+            <figcaption><b>Exploded layers.</b> Outer protective CNT lattice → hexagonal photovoltaic layer → mycelial CNT wiring and power bus → integrated compute &amp; memory core lattice → structural base. "Hull is compute."</figcaption>
+          </figure>
+          <figure className="fig">
+            <img src="/img/aerogel-paper.webp" alt="Graphical abstract of the doped graphene aerogel stealth paper" />
+            <figcaption><b>Reference — not our result.</b> Graphical abstract of a heteroatom-doped reduced-graphene-oxide aerogel study (full citation being identified — §10): interlayer crosslinking, topological distortion, and lattice stabilization yield a lightweight aerogel with radar-infrared compatible stealth (EAB<sub>max</sub> 8.06 GHz, RL<sub>min</sub> −64.82 dB). This is the class of material our aerogel interstitial is specified from — doped, structured, multifunctional.</figcaption>
+          </figure>
+        </div>
+      </section>
 
       <section className="brief">
         <h2>§1 · TOPOLOGY MATH</h2>
@@ -199,7 +226,177 @@ export default function Home() {
       </section>
 
       <section className="brief">
-        <h2>§5 · THE ASK</h2>
+        <h2>§5 · FABRICATION — PRINTING THE ICO LATTICE IN RESIN</h2>
+        <p className="lede">
+          The skin is printed, not assembled. The primary structure is a geodesic lattice formed in
+          UV-curable elastomer resin inside a vacuum chamber (10⁻⁷ Torr class in the facility
+          schematic), by two coupled processes: volumetric / projector-directed curing that builds
+          each shell layer as a continuous lattice, and the cymatic bath (§6) that patterns what
+          goes inside each face while the resin is still liquid.
+        </p>
+        <div className="two-col">
+          <div className="panel">
+            <h3>The print sequence</h3>
+            <ul className="tight">
+              <li><b>Shell n is cast first</b> — projector-directed UV curing forms the geodesic lattice layer by layer (the CAL lineage: a whole volume cured from projected patterns, not stacked filaments — §10).</li>
+              <li><b>Precursors go in wet.</b> Metal-coated CNTs and metallic-glass particles are suspended in the resin; the acoustic field (§6) organises them before the cure locks the pattern.</li>
+              <li><b>Nodes are embedded, not placed.</b> Pre-printed Fe-BMG elements are seated at vertices during the build — the memory is in the lattice from the first cure, which is what §7 means by imbued.</li>
+              <li><b>Aerogel is grout.</b> Silica aerogel — doped per §8 — is infiltrated into the interstitial frame under vacuum and sealed: insulation, structure, and dopant host in one pour.</li>
+              <li><b>Shell n+1 casts over it.</b> The multi-shell stack (t = 1.00 / 1.60 / 2.05 in the estate shells model) is a print sequence, not a parts list.</li>
+            </ul>
+          </div>
+          <div className="panel">
+            <h3>Why resin printing is the enabling choice</h3>
+            <p>
+              A geodesic lattice at hull scale cannot be machined and should not be assembled from
+              struts: every joint is a failure mode and a labour line. Volumetric resin printing
+              forms the lattice as one object, lets functional particles be patterned <i>during</i>
+              formation rather than coated on afterwards, and scales by chamber, not by headcount.
+              The honest limits are the ones in §3: print resolution against glass-forming physics
+              at the node scale, and vacuum integrity of the sealed interstitials over a service life.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section className="brief">
+        <h2>§6 · THE CYMATIC MASK — A CHLADNI CREATOR IN EVERY HEX</h2>
+        <p className="lede">
+          The geodesic mesh sets the address space; the cymatic mask sets the density. Each hex face
+          is an individual Chladni plate: driven at a chosen mode by the face's own transducers, the
+          standing wave's nodal lines become the circuit — conductive precursor settles on the nodes
+          of the wave, antinodes become pads. One face, one pattern, chosen per face. The circuit
+          subdivides the face without touching the mesh above it.
+        </p>
+        <Chladni />
+        <div className="panel" style={{ marginTop: 18 }}>
+          <h3>The mask, in motion — 30s</h3>
+          <video className="motion" controls preload="metadata" poster="/img/multi-shell.webp">
+            <source src="/cymatic-mask.mp4" type="video/mp4" />
+          </video>
+          <p className="faint" style={{ fontSize: '0.72rem', marginTop: 8, marginBottom: 0 }}>
+            Program-motion, deterministic: the field, the particle migration, the pads, and the route are
+            computed from the same field equation as the instrument above — nothing is hand-animated.
+            GIF version: <a href="/cymatic-mask.gif" style={{ color: 'var(--fg-muted)' }}>cymatic-mask.gif</a>
+          </p>
+        </div>
+        <div className="two-col" style={{ marginTop: 18 }}>
+          <div className="panel">
+            <h3>Why this multiplies density</h3>
+            <p>
+              Geodesic subdivision is global: one more level quadruples every face on the hull,
+              wanted or not. The mask is local: density is bought per face, at the mode the face is
+              driven at, only where the sensing or routing load justifies it. A quiet face runs a
+              low mode and a sparse circuit; a face over a hot zone runs dense. The instrument above
+              computes the multiplier live — pads per face × faces — because the count is a property
+              of the field equation, not a rendering.
+            </p>
+          </div>
+          <div className="panel">
+            <h3>Why UUID routing still holds</h3>
+            <p>
+              A pad is not a new kind of address. Its sub-address derives deterministically from the
+              parent face's spatial ID plus its quantised nodal coordinates — the same derivation
+              rule as the mesh itself, one level down. Routing crosses pads by adjacency inside the
+              face and crosses faces by the mesh, with one rule at both scales: identity is a
+              function of position. No registry appears at any density.
+            </p>
+            <p className="faint" style={{ fontSize: '0.74rem', marginBottom: 0 }}>
+              Grade: the field mathematics is exact and demonstrated above. Acoustic patterning of
+              conductive precursors is REPORTED in the literature at bench scale; patterning inside
+              a curing resin face, at hull scale, is DESIGN — WP4 (§4) is the measurement.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section className="brief">
+        <h2>§7 · CORE MEMORY, IMBUED</h2>
+        <p className="lede">
+          The name is literal. Core memory — the woven ferrite grids that flew to the Moon — stored
+          bits as magnetic state in a physical lattice, and the lattice was the memory: no separation
+          between the medium and the structure holding it. IcoSkin returns to that architecture with
+          modern materials. The Fe-BMG elements at the vertices and faces are written into the skin
+          during the print (§5); their magnetic state is the flag store; the hull does not carry a
+          memory subsystem, it <i>is</i> one.
+        </p>
+        <div className="two-col">
+          <div className="panel">
+            <h3>Imbued, in three senses</h3>
+            <ul className="tight">
+              <li><b>Manufacturing:</b> the memory elements are embedded during fabrication — imbued at birth, not installed.</li>
+              <li><b>Identity:</b> each element's address is its position (§1) — the memory is imbued with the hull's coordinate system, so a read is always located.</li>
+              <li><b>State:</b> event, state, and orientation flags persist as material magnetisation — the skin remembers what happened to it in the same material that it happened to.</li>
+            </ul>
+          </div>
+          <div className="panel">
+            <h3>The honest shape of it</h3>
+            <p>
+              This is sparse state, not a memory hierarchy: 3 bits per node, refreshed by design,
+              read and written inductively through the bus. It will not replace a single conventional
+              memory chip at density, retention, or speed — §3 says so plainly. What it does that no
+              chip does: survive as structure, cost no separate volume or mass budget, and keep its
+              state spatially addressed by construction. The claim is architectural, and it is the
+              strongest claim in this brief.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section className="brief">
+        <h2>§8 · PARTICLE SENSING — DOPED AEROGEL, LOCATED EVENTS</h2>
+        <p className="lede">
+          The aerogel interstitial is the dopant host. Doping is what turns insulation into an
+          instrument: regions of the aerogel carry isotopes chosen for the particles they answer to,
+          and an interaction there raises a flag at that face — located, because everything on this
+          hull is located. The physics below is established; the engineering claim is graded at the end.
+        </p>
+        <div className="panel">
+          <table>
+            <thead><tr><th>Dopant</th><th>Interaction</th><th>What it gives the skin</th><th>Grade</th></tr></thead>
+            <tbody>
+              <tr>
+                <td>Boron-10</td>
+                <td>¹⁰B(n,α)⁷Li — thermal-neutron capture, cross-section ≈ 3,837 barns</td>
+                <td>Neutron events, counted at the face where they happen; the same boron loading is the radiation shield (below)</td>
+                <td><span className="tag ok">ESTABLISHED</span></td>
+              </tr>
+              <tr>
+                <td>Gallium-71</td>
+                <td>⁷¹Ga(ν,e⁻)⁷¹Ge — the radiochemical neutrino capture GALLEX and SAGE ran on tens of tonnes of gallium</td>
+                <td>A neutrino interaction channel in principle — see the boundary note; nobody sane promises a hull-scale neutrino telescope</td>
+                <td><span className="tag ok">PHYSICS ESTABLISHED</span></td>
+              </tr>
+              <tr>
+                <td>Heteroatom-doped graphene aerogel (N/S/P class)</td>
+                <td>EM absorption + thermal signature management in the interstitial itself</td>
+                <td>Radar-infrared compatible stealth behaviour from the insulation layer (EAB<sub>max</sub> 8.06 GHz, RL<sub>min</sub> −64.82 dB as reported on the study's graphical abstract — §10)</td>
+                <td><span className="tag ok">REPORTED</span></td>
+              </tr>
+            </tbody>
+          </table>
+          <p style={{ marginTop: 12 }}>
+            <b>Boron is also the shield.</b> The same ¹⁰B loading that detects thermal neutrons absorbs
+            them: boron-rich and boron-nitride materials are a studied spacecraft radiation-shielding
+            family precisely because hydrogenous + boron loading moderates and then captures the
+            neutron component of the radiation environment. On IcoSkin the shielding is not a layer
+            added around the instrument — the instrument's host material is the shield.
+          </p>
+          <p className="faint" style={{ fontSize: '0.74rem', marginBottom: 0 }}>
+            Boundary, stated plainly: GALLEX/SAGE needed ~30–60 tonnes of gallium and months of
+            exposure to count solar neutrinos. A hull carries kilograms. The claim is therefore NOT
+            neutrino astronomy — it is that high-flux particle events (neutrons, and the charged
+            component) register as sparse located flags, with the neutrino channel present as physics,
+            not as a promised instrument. A further honesty point: no peer-reviewed demonstration of a
+            doped aerogel functioning as a particle detector exists — silica aerogel's established
+            particle-physics role is as a Cherenkov radiator. The doped-aerogel sensor is a design
+            concept, and it is labelled that way here. Citations: §10.
+          </p>
+        </div>
+      </section>
+
+      <section className="brief">
+        <h2>§9 · THE ASK</h2>
         <div className="two-col">
           <div className="panel">
             <h3>Materials partners</h3>
@@ -220,6 +417,25 @@ export default function Home() {
               Introductions and enquiries: Sam Stave · SoMaCoSF · via this site's network.
             </p>
           </div>
+        </div>
+      </section>
+
+      <section className="brief">
+        <h2>§10 · REFERENCES</h2>
+        <p className="lede">
+          The load-bearing external claims on this page, and where they come from. REPORTED means
+          another group's published result — cited, never adopted as ours.
+        </p>
+        <div className="panel">
+          <ul className="refs" style={{ margin: 0, paddingLeft: 18 }}>
+            <li><span className="tag ok">REF</span><span data-ref="febmg">Rodríguez-Sánchez, M. et al. "Laser powder bed fusion of a newly designed Fe-based bulk metallic glass with enhanced soft magnetic properties." Acta Materialia 318 (2026). DOI 10.1016/j.actamat.2026.122636 — as-built coercivity as low as 44 A/m, critical casting thickness ≈ 1 mm, amorphous fraction &gt; 87%. The source of §2's magnetic figures; printed specimens still carried pores and cracks, and no complete device was demonstrated.</span></li>
+            <li><span className="tag ok">REF</span><span data-ref="cal">Kelly, B. E. et al. "Volumetric additive manufacturing via tomographic reconstruction." Science 363(6431), 1075–1079 (2019). DOI 10.1126/science.aau7114 — computed axial lithography (CAL), the volumetric resin-printing lineage §5 builds on.</span></li>
+            <li><span className="tag ok">REF</span><span data-ref="gallex">Hampel, W. et al. (GALLEX Collaboration). "GALLEX solar neutrino observations: results for GALLEX IV." Physics Letters B 447, 127–133 (1999). DOI 10.1016/S0370-2693(98)01579-2 · Abdurashitov, J. N. et al. (SAGE Collaboration). "Measurement of the solar neutrino capture rate with gallium metal. III." Physical Review C 80, 015807 (2009). DOI 10.1103/PhysRevC.80.015807 — radiochemical detection on 30.3 t (GALLEX) and ~60 t (SAGE) of gallium, yielding on the order of one ⁷¹Ge atom per day: the physics behind §8's gallium row, and the source of its scale caveat.</span></li>
+            <li><span className="tag ok">REF</span><span data-ref="b10">¹⁰B thermal-neutron capture cross-section = 3,837 barns at 0.0253 eV (ENDF/B evaluated data; cf. "Nuclear Instrumentation," Springer, 2022, DOI 10.1007/978-981-19-6589-0_5) — the basis of BF₃ and boron-lined neutron counters and of §8's detection and shielding claims. Boron detects neutrons, not neutrinos; the two are kept separate on this page deliberately.</span></li>
+            <li><span className="tag ok">REF</span><span data-ref="bnnt">Thibeault, S. A. et al. "Radiation Shielding Materials Containing Hydrogen, Boron, and Nitrogen: Systematic Computational and Experimental Study." NASA Langley / NIAC Final Report (2012), NTRS 20160010096 — hydrogenated BNNT shown computationally to shield galactic cosmic rays, solar particle events, and secondary neutrons while serving as structure. Modelled efficacy, materials-characterisation stage — a research programme, not a flown hull material.</span></li>
+            <li><span className="tag ok">REF</span><span data-ref="aerogel">Heteroatom-doped reduced-graphene-oxide aerogel (N,S- vs N,P-co-doped variants, "rGO-NS" / "rGO-NP"), radar-infrared compatible stealth — the study whose graphical abstract appears in the Figures, reporting EAB<sub>max</sub> 8.06 GHz and RL<sub>min</sub> −64.82 dB on the abstract itself. <b>Citation status: the paper has not yet been identified</b> — an exact-figure and label search across Crossref and the open web (2026-11-18) found no match, so the figures are quoted as the abstract's own claims, not as a verified citation. Identification is an open task, not a detail.</span></li>
+            <li><span className="tag warn">NOTE</span>Design tokens: monohud (MIT, © 2026 Joshua Guo). Spatial IDs on this page are PROVISIONAL, derived from coordinates under the SoMaCo UUID protocol.</li>
+          </ul>
         </div>
       </section>
 

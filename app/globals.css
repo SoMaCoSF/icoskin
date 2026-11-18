@@ -132,3 +132,13 @@ ul.tight li { margin-bottom: 4px; }
 .tag.danger { border-color: var(--danger); color: var(--danger); }
 
 footer { margin-top: 48px; border-top: 1px solid var(--line-dim); padding-top: 16px; font-size: 0.7rem; color: var(--fg-faint); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+.gallery { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+@media (max-width: 900px) { .gallery { grid-template-columns: 1fr; } }
+figure.fig { margin: 0; background: var(--bg-1); border: 1px solid var(--line); padding: 10px; clip-path: polygon(16px 0, 100% 0, 100% calc(100% - 16px), calc(100% - 16px) 100%, 0 100%, 0 16px); }
+figure.fig img { width: 100%; height: auto; display: block; }
+figure.fig figcaption { color: var(--fg-muted); font-size: 0.74rem; line-height: 1.55; padding: 10px 4px 4px; }
+figure.fig figcaption b { color: var(--fg); font-weight: 600; }
+.refs { font-size: 0.78rem; color: var(--fg-muted); line-height: 1.7; }
+.refs li { margin-bottom: 6px; }
+.refs .tag { margin-right: 8px; }
+video.motion { width: 100%; height: auto; display: block; background: #000; }
