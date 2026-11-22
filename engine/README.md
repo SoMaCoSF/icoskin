@@ -49,3 +49,26 @@ python3 -m venv .venv && .venv/bin/pip install numpy scipy scikit-image fastapi 
 3. **This backend** (reference, exercised): Python scientific stack where JS is
    weak — VAMToolbox-class tomography, Gor'kov solvers, Shapely/Clipper2 DRC,
    ngspice via netlists like the one generated here.
+
+## First knowledge ingestion (2026-11-22)
+
+Founder asked what to ingest first. Answer: **the core-alloy magnetic parameter
+set** (H_c, B_s, B_r/B_s, λ_s, S_w) — every surviving claim routes through it
+(gate margins, the 8.3 mA drive point, Villari lockup, strain sensing), and the
+engine's table carried a wrong placeholder (H_c = 1.8 A/m). Ingested via the
+estate Firecrawl connector from manufacturer datasheets into
+`knowledge/ism_scs_scraped_knowledge.json`:
+
+- **Metglas 2714A (Co-based)** — logic-core candidate per the Argon fix:
+  B_s 0.57 T, λ_s < 0.5 ppm, μ_max 10⁶. Trade: flux reservoir ~2.7× smaller
+  than Fe-based — clock restoration even less optional.
+- **Metglas 2605SA1 (Fe-based)** — sensing-core candidate: B_s 1.56 T,
+  λ_s 27 ppm (the Villari channel), Curie 395 °C.
+- H_c is **not** numerically extracted for either (datasheets give curves, not
+  tables) — recorded as null with the class figure flagged, not invented.
+
+Notes on the founder-supplied scripts: `outreach.py`'s three target companies
+are fictional (`.example` emails, self-awarded fit/patent scores) — a pitch
+template, never a send list. `r-nd.py` scrapes arXiv *search pages* and keeps
+1,500-char snippets; the ingestion above replaces that pattern with datasheet
+scrapes at the source.

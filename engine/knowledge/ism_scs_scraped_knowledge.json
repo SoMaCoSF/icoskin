@@ -1,0 +1,45 @@
+{
+  "schema": "ism-scs-knowledge-v1",
+  "ingested": "2026-11-22",
+  "method": "Firecrawl (estate connector, keyless) search + scrape of manufacturer datasheets — replaces the arXiv-search-page snippets of the founder-supplied r-nd.py pattern",
+  "entries": [
+    {
+      "id": "ALLOY-2714A",
+      "subject": "Metglas 2714A (Co-based amorphous alloy) — candidate LOGIC core material",
+      "source": "https://metglas.com/wp-content/uploads/2021/06/2714A-Magnetic-Alloy-updated.pdf",
+      "grade": "DATASHEET (manufacturer technical bulletin)",
+      "properties": {
+        "saturation_induction_T": 0.57,
+        "saturation_magnetostriction_ppm": "<0.5",
+        "max_dc_permeability_annealed": 1000000,
+        "electrical_resistivity_uohm_cm": 142,
+        "curie_C": 225,
+        "density_g_cm3": 7.59,
+        "squareness": "high (manufacturer: 'high squareness ratio - low coercive force')",
+        "coercivity_A_m": null,
+        "coercivity_note": "Not stated numerically in the bulletin text; hysteresis loop figure only. Literature class: sub-A/m to few A/m. DO NOT use a precise value until extracted from the loop figure or a second datasheet."
+      },
+      "design_implication": "Matches Argon-review fix for logic cores (near-zero magnetostriction -> Villari lockup immunity). Trade: Bs = 0.57 T vs Fe-based 1.56 T shrinks the flux reservoir dPhi = 2*Br*Ac by ~2.7x — the fan-out budget gets worse; clock restoration is not optional."
+    },
+    {
+      "id": "ALLOY-2605SA1",
+      "subject": "Metglas 2605SA1 (Fe-based amorphous alloy) — candidate SENSING core material",
+      "source": "https://metglas.com/magnetic-materials/ + https://metglas.com/wp-content/uploads/2021/06/2605SA1-Magnetic-Alloy-Updated.pdf",
+      "grade": "DATASHEET (manufacturer); numeric table partially image-locked in PDF — values below are from the manufacturer's materials page and the alloy's published class figures",
+      "properties": {
+        "saturation_induction_T": 1.56,
+        "saturation_magnetostriction_ppm": 27,
+        "curie_C": 395,
+        "coercivity_A_m": null,
+        "coercivity_note": "Fe-BMG class figure ~44 A/m was the value used in the Argon review arithmetic; the SA1 bulletin presents DC hysteresis as curves (Single Strip Test), not a tabulated Hc. Treat 44 A/m as CLASS-REPORTED, not SA1-datasheet-extracted."
+      },
+      "design_implication": "lambda_s = 27 ppm is the Villari sensing channel (Argon: 2 MPa -> dH ~150 A/m). Use where strain sensing is wanted; keep away from logic cores (radiation-shrinkage lockup path)."
+    }
+  ],
+  "next_ingest_queue": [
+    "Photopolymer extinction coefficient mu_ext for CNT-loaded resin at 405 nm (decides 2D projection layer thickness)",
+    "Micro-toroid / picture-frame core fabrication at 100 um scale (closed magnetic circuit vendors, achievable r_out/r_in)",
+    "Switching coefficient S_w for 2714A / 2605SA1 (sets tau_sw and the clock rate)",
+    "Magnetic template pinning precedent (ferromagnetic concentrator pin arrays for particle placement)"
+  ]
+}
