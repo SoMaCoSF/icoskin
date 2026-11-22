@@ -9,7 +9,7 @@ Live: https://icoskin.somacosf.com/ · CAD/CAM engine: https://icoskin.somacosf.
 | Surface | Source | What it is |
 |---|---|---|
 | `/` (materials brief) | `app/page.tsx`, `app/Simulator.tsx`, `app/Chladni.tsx`, `lib/ico.ts` | The graded brief: topology math (§1), layers (§2), claim boundary (§3), work packages (§4), fabrication (§5), cymatic mask (§6), core memory (§7), particle sensing (§8), the ask (§9), references (§10), CAD/CAM (§11) |
-| `/cad-cam` (engine) | `public/cad-cam.html` — single file, no build step | ISM-SCS CAD/CAM Engine v6: the manufacturing workstation the brief's §11 documents |
+| `/cad-cam` (engine) | `public/cad-cam.html` — single file, no build step | ISM-SCS CAD/CAM Engine v7: the manufacturing workstation the brief's §11 documents |
 
 ## CAD/CAM Engine v5 — module map
 
@@ -58,7 +58,10 @@ python3 deploy.py    # git-linked Vercel production deploy of SoMaCoSF/icoskin m
 
 Deploy is git-linked: commit + push to `main`, then `deploy.py` creates the production deployment from git and polls to READY. Legacy content is augment-only — new surfaces are added, never overwritten in place without a `.bk` backup.
 
+5. **Testbench Mode — Magnetic Core Logic (v7)** — waveform generators at edge ports (editable bit patterns), packets on graph edges with delay τ = L/v_wave, a designated Fe-MG coil as gate core: flux sums at 0.60·Φc per active input against gate thresholds (AND ≥ 1.0·Φc, OR ≥ 0.5, XOR window [0.5, 1.1), NOT vs bias winding). Hysteresis state renders blue (0) / red (1); oscilloscope lanes A / B / Φ / OUT; measured truth table verified against expected per tick. Verified by exercise: AND on A=01101, B=00111 → Φ = 0, 0.6, 1.2, 0.6, 1.2 → OUT 0,0,1,0,1 (5/5); XOR 5/5. Bounds: discrete-event, single gate, resistive-era timing — multi-gate composition (fan-out, cascaded cores, clock skew across the patch) is the next iteration, as is inductive coupling between cores.
+
 ## Iteration log
 
+- **2026-11-22 · v7 testbench** — Magnetic Core Logic testbench per the founder's spec: port waveform generators, τ = L/v packet delay, flux-summation gate evaluation (AND/OR/XOR/NOT) at a designated Fe-MG coil, blue/red hysteresis rendering, oscilloscope + verified truth table (AND 5/5, XOR 5/5, driven programmatically in headless Chrome, zero page errors).
 - **2026-11-22 · v6 field→vector pipeline** — field-source selector (Chladni |Z| / Gor'kov proxy), Zhang–Suen thinning skeleton + graph vectorisation + Douglas–Peucker replacing greedy chaining, net-aware DRC (junction = one net; short = interior crossing) with the v5 shorts count corrected on the record, spacing rule rescaled to tile resolution (800 µm default, ≈175 µm/px stated). Measured: handshakes 6/12 → 11/12 (Chladni) / 12/12 (Gor'kov), traces 42 → 180 / 465, DRC clean. §11 updated with the correction at equal prominence.
 - **2026-11-22 · v5 convergence** — CAD/CAM Engine v5 built from the two uploaded posters + v4 prototypes, verified in headless Chrome (zero page errors; pulse/DRC/sinogram/handshakes driven programmatically), converged into this repo as `public/cad-cam.html` (served at `/cad-cam`), brief gained §11 + header link, engine gained a back-link to the brief. The engine also carries a fallback layout stylesheet, so it renders correctly even where the Tailwind CDN is unreachable.

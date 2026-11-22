@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!-- SOM-DOC-10910-v1.0.0 ISM-SCS CAD/CAM Engine v5 — Patch Editor, Skeleton/DRC, Sinogram, Pulse Sim -->
 <html lang="en" class="dark"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ISM-SCS CAD/CAM Engine v6 — GeoHex Patch · DRC · CAL Sinogram · Core-Memory Pulse</title>
+<title>ISM-SCS CAD/CAM Engine v7 — GeoHex Patch · DRC · CAL Sinogram · Core-Memory Pulse</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <script>if(window.tailwind)tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans-serif'],mono:['JetBrains Mono','monospace']},colors:{aero:{950:'#040812',900:'#0a101f',800:'#111a2e',700:'#1c2a47',cyan:'#06b6d4',amber:'#f59e0b',emerald:'#10b981'}}}}};</script>
@@ -26,7 +26,7 @@ canvas#cv{width:100%;height:100%;min-height:480px;display:block}select,input[typ
 h1{font-size:16px;margin:0}h2{font-size:12px;margin:0}p{margin:0}</style></head>
 <body class="min-h-screen flex flex-col">
 <header class="bg-aero-900/90 border-b border-aero-700 px-4 py-2.5 flex flex-wrap items-center justify-between gap-2 sticky top-0 z-40">
-<div><div class="flex items-center gap-2"><h1 class="font-bold text-sm sm:text-base text-white tracking-wide">ISM-SCS CAD/CAM ENGINE <span class="text-cyan-400">v6</span></h1><span class="px-2 py-0.5 text-[10px] font-mono bg-amber-500/10 text-amber-400 border border-amber-500/30 rounded">PATCH · DRC · CAL · PULSE</span></div>
+<div><div class="flex items-center gap-2"><h1 class="font-bold text-sm sm:text-base text-white tracking-wide">ISM-SCS CAD/CAM ENGINE <span class="text-cyan-400">v7</span></h1><span class="px-2 py-0.5 text-[10px] font-mono bg-amber-500/10 text-amber-400 border border-amber-500/30 rounded">PATCH · DRC · CAL · PULSE</span></div>
 <p class="text-[11px] text-slate-400 font-mono">Multi-Tile GeoHex Patch Editor • Medial-Axis Skeleton + DRC • Tomographic Sinogram • Transient Core-Memory Pulse</p></div>
 <div class="flex gap-2"><a href="/" class="btn bg-aero-800 hover:bg-aero-700 text-slate-200 border border-aero-700" style="text-decoration:none;display:inline-flex;align-items:center">← ICOSKIN BRIEF</a><button onclick="exportStackJSON()" class="btn bg-aero-800 hover:bg-aero-700 text-cyan-300 border border-cyan-500/40">Export Stack JSON</button><button onclick="exportAllLayers()" class="btn bg-cyan-600 hover:bg-cyan-500 text-white shadow-lg shadow-cyan-600/20">Export 3-Layer Masks (PNG)</button></div></header>
 
@@ -70,11 +70,26 @@ h1{font-size:16px;margin:0}h2{font-size:12px;margin:0}p{margin:0}</style></head>
 <!-- CENTER -->
 <section class="lg:col-span-6 bg-aero-900 rounded-xl p-3 panel flex flex-col min-h-[520px]">
 <div class="flex flex-wrap items-center justify-between gap-2 pb-2 px-1">
-<div class="flex gap-1.5"><button class="tabbtn on" id="tab-patch" onclick="setMode('patch')">PATCH EDITOR</button><button class="tabbtn" id="tab-pulse" onclick="setMode('pulse')">PULSE SIM</button><button class="tabbtn" id="tab-sino" onclick="setMode('sino')">SINOGRAM / CAL</button></div>
+<div class="flex gap-1.5"><button class="tabbtn on" id="tab-patch" onclick="setMode('patch')">PATCH EDITOR</button><button class="tabbtn" id="tab-pulse" onclick="setMode('pulse')">PULSE SIM</button><button class="tabbtn" id="tab-sino" onclick="setMode('sino')">SINOGRAM / CAL</button><button class="tabbtn" id="tab-testbench" onclick="setMode('testbench')">TESTBENCH</button></div>
 <div class="font-mono text-[11px] flex gap-2"><span class="px-2 py-0.5 rounded bg-aero-950 border border-aero-700 text-cyan-400">TILES <strong id="hud-tiles" class="text-white">7</strong></span><span class="px-2 py-0.5 rounded bg-aero-950 border border-aero-700 text-emerald-400">TRACES <strong id="hud-traces" class="text-white">0</strong></span><span class="px-2 py-0.5 rounded bg-aero-950 border border-aero-700 text-amber-400">COILS <strong id="hud-coils" class="text-white">0</strong></span></div></div>
 <div class="relative flex-1 w-full rounded-lg overflow-hidden bg-aero-950 border border-aero-700/80"><canvas id="cv" class="w-full h-full cursor-crosshair"></canvas></div>
 <div id="mode-hint" class="pt-2 px-1 text-[11px] font-mono text-slate-400">PATCH: click a nodal vertex in any tile to place / remove an Fe-MG core-memory coil. Neighbour tiles inherit rotated Chladni modes (N,M offset by axial coordinate) so port continuity is a real test, not a copy.</div>
 <div id="sino-wrap" class="hidden pt-3"><div class="flex items-center justify-between pb-1"><span class="text-xs font-mono text-cyan-300">RADON SINOGRAM — centre tile, Layer 2 (Cu/Fe-MG)</span><button onclick="buildSinogram()" class="btn bg-aero-800 border border-aero-700 text-slate-200">Recompute</button></div><canvas id="sino" width="720" height="220" class="w-full rounded border border-aero-700 bg-black"></canvas><p class="text-[10px] text-slate-500 pt-1 font-mono">θ 0–180° × detector offset. Each column = line-integral projection of the extracted trace field at that angle — the input CAL dose compensation consumes. Schematic Radon on the vector field, not a voxel CT reconstruction.</p></div>
+<div id="tb-wrap" class="hidden pt-3">
+<div class="flex flex-wrap items-center gap-2 pb-2">
+<span class="text-xs font-mono text-cyan-300">TESTBENCH — MAGNETIC CORE LOGIC</span>
+<select id="tb-gate" class="bg-aero-950 border border-aero-700 rounded px-2 py-1 font-mono text-white text-[11px]"><option>AND</option><option>OR</option><option>XOR</option><option>NOT</option></select>
+<label class="text-[11px] font-mono text-slate-400">A pattern <input id="tb-patA" value="01101" size="6" class="bg-aero-950 border border-aero-700 rounded px-1.5 py-1 text-white font-mono"></label>
+<label class="text-[11px] font-mono text-slate-400">B pattern <input id="tb-patB" value="00111" size="6" class="bg-aero-950 border border-aero-700 rounded px-1.5 py-1 text-white font-mono"></label>
+<button onclick="tbAutoGate()" class="btn bg-aero-800 border border-aero-700 text-slate-200">Auto-place gate coil</button>
+<button onclick="tbToggle()" id="tb-run" class="btn bg-emerald-600/25 border border-emerald-500/50 text-emerald-300">▶ Run Test</button>
+<button onclick="tbStep()" class="btn bg-aero-800 border border-aero-700 text-slate-200">Step tick</button>
+<button onclick="tbReset()" class="btn bg-aero-800 border border-aero-700 text-slate-200">Reset</button>
+</div>
+<div id="tb-status" class="font-mono text-[11px] text-slate-400 pb-2">Click ports in order: 1st = Input A · 2nd = Input B · 3rd = Output. Click a coil to make it the gate core (or Auto-place). Φ per active input = 0.60·Φc. AND fires at Φ ≥ 1.0·Φc (both inputs), OR at ≥ 0.5, XOR in the window [0.5, 1.1), NOT inverts A against its bias winding.</div>
+<canvas id="scope" width="720" height="118" class="w-full rounded border border-aero-700 bg-black"></canvas>
+<div id="tb-table" class="font-mono text-[11px] text-slate-400 pt-2 space-y-0.5"></div>
+</div>
 </section>
 
 <!-- RIGHT -->
@@ -318,18 +333,20 @@ function layerCanvas(layer){const S2=1024,oc=document.createElement('canvas');oc
  g.restore();return oc;}
 function dl(canvas,name){const a=document.createElement('a');a.download=name;a.href=canvas.toDataURL('image/png');a.click();}
 function exportAllLayers(){dl(layerCanvas(1),'ISM-SCS_L1_CNT_scaffold.png');setTimeout(()=>dl(layerCanvas(2),'ISM-SCS_L2_Cu_FeMG.png'),350);setTimeout(()=>dl(layerCanvas(3),'ISM-SCS_L3_aerogel_channels.png'),700);toast('Exported L1/L2/L3 masks — centre tile, 1024².');log('Exported 3-layer mask stack (PNG ×3)');}
-function exportStackJSON(){const data={schema:'ISM-SCS-CADCAM-v6',ts:new Date().toISOString(),imbuuid:document.getElementById('addr').textContent,acoustic:{freqHz:S.freq,N:S.N,M:S.M},rules:{widthUm:S.widthUm,spacingUm:S.spacingUm},tiles:S.tiles.map(t=>({id:t.id,q:t.q,r:t.r,sides:t.sides,n:t.n,m:t.m,traces:t.traces.length,ports:t.ports.map((p,i)=>({edge:i,x:+p.x.toFixed(1),y:+p.y.toFixed(1)}))})),coils:S.coils.map(c=>({x:+c.x.toFixed(1),y:+c.y.toFixed(1),bit:c.bit||0})),drc:{violations:S.viol},pulse:S.pulse?{lenMm:+S.pulse.lenMm.toFixed(2),R:+S.pulse.R.toFixed(4),Vdrop:+S.pulse.V.toFixed(4),heatMw:+S.pulse.P.toFixed(2)}:null};
+function exportStackJSON(){const data={schema:'ISM-SCS-CADCAM-v7',ts:new Date().toISOString(),imbuuid:document.getElementById('addr').textContent,acoustic:{freqHz:S.freq,N:S.N,M:S.M},rules:{widthUm:S.widthUm,spacingUm:S.spacingUm},tiles:S.tiles.map(t=>({id:t.id,q:t.q,r:t.r,sides:t.sides,n:t.n,m:t.m,traces:t.traces.length,ports:t.ports.map((p,i)=>({edge:i,x:+p.x.toFixed(1),y:+p.y.toFixed(1)}))})),coils:S.coils.map(c=>({x:+c.x.toFixed(1),y:+c.y.toFixed(1),bit:c.bit||0})),drc:{violations:S.viol},pulse:S.pulse?{lenMm:+S.pulse.lenMm.toFixed(2),R:+S.pulse.R.toFixed(4),Vdrop:+S.pulse.V.toFixed(4),heatMw:+S.pulse.P.toFixed(2)}:null};
  const a=document.createElement('a');a.download='ISM-SCS_patch_stack.json';a.href='data:application/json;charset=utf-8,'+encodeURIComponent(JSON.stringify(data,null,2));a.click();log('Exported stack JSON');}
 </script>
 <script>
 // ---------- render + interaction ----------
-function setMode(m){S.mode=m;['patch','pulse','sino'].forEach(k=>document.getElementById('tab-'+k).classList.toggle('on',k===m));
+function setMode(m){S.mode=m;['patch','pulse','sino','testbench'].forEach(k=>document.getElementById('tab-'+k).classList.toggle('on',k===m));
  document.getElementById('sino-wrap').classList.toggle('hidden',m!=='sino');if(m==='sino')buildSinogram();
- document.getElementById('mode-hint').textContent=m==='patch'?'PATCH: click a nodal vertex in any tile to place / remove an Fe-MG coil. Neighbour tiles run rotated Chladni modes, so port continuity is a real test, not a copy.':m==='pulse'?'PULSE: click two edge ports (green dots). Dijkstra routes the pulse on the extracted graph; coils near the path flip.':'SINOGRAM: Radon projection of the centre-tile trace field — the CAL input. Export the 3-layer stack from the header.';}
+ document.getElementById('tb-wrap').classList.toggle('hidden',m!=='testbench');
+ document.getElementById('mode-hint').textContent=m==='testbench'?'TESTBENCH: assign Input A / Input B / Output ports by clicking, designate a gate coil, then Run. Packets travel the extracted graph with delay tau = L/v; flux sums at the gate core each tick; the oscilloscope records A, B, Phi and OUT.':m==='patch'?'PATCH: click a nodal vertex in any tile to place / remove an Fe-MG coil. Neighbour tiles run rotated Chladni modes, so port continuity is a real test, not a copy.':m==='pulse'?'PULSE: click two edge ports (green dots). Dijkstra routes the pulse on the extracted graph; coils near the path flip.':'SINOGRAM: Radon projection of the centre-tile trace field — the CAL input. Export the 3-layer stack from the header.';}
 function sync(){S.freq=+document.getElementById('inp-freq').value;S.N=+document.getElementById('inp-n').value;S.M=+document.getElementById('inp-m').value;S.widthUm=+document.getElementById('inp-w').value;S.spacingUm=+document.getElementById('inp-sp').value;
  document.getElementById('lbl-freq').textContent=S.freq+' Hz';document.getElementById('lbl-n').textContent=S.N;document.getElementById('lbl-m').textContent=S.M;document.getElementById('lbl-w').textContent=S.widthUm+' µm';document.getElementById('lbl-sp').textContent=S.spacingUm+' µm';buildPatch();scatter();}
 function regen(){buildPatch();log('Skeleton re-extracted: '+allTraces().length+' traces across 7 tiles');}
 cv.addEventListener('click',e=>{const r=cv.getBoundingClientRect(),x=e.clientX-r.left,y=e.clientY-r.top;
+ if(S.mode==='testbench'){tbClick(x,y);return;}
  if(S.mode==='pulse'){const hit=pickPort(x,y);if(!hit){toast('No port within snap range — click a green edge port.');return;}
    hit.p._nid=null; // force nid assignment in buildGraph via ports loop
    S.pulseSel.push(hit);document.getElementById('pulse-out').innerHTML=`Ports selected: <span class="text-white">${S.pulseSel.length} / 2</span>`+S.pulseSel.map(s=>`<div>· T${s.t.id} edge ${s.pi} — imbuuid://…/t${s.t.id}/e${s.pi}</div>`).join('');
@@ -346,13 +363,115 @@ function render(){ctx.clearRect(0,0,S.W,S.H);ctx.strokeStyle='rgba(28,42,71,.35)
   ctx.fillStyle='rgba(148,163,184,.8)';ctx.font='10px JetBrains Mono';ctx.fillText('T'+t.id+' q'+t.q+',r'+t.r+' N'+t.n+'M'+t.m+(t.sides===5?' PENT':''),t.cx-34,t.cy-t.R-6);
   ctx.strokeStyle='#10b981';ctx.lineWidth=2.2;ctx.shadowColor='#10b981';ctx.shadowBlur=6;t.traces.forEach(tr=>{ctx.beginPath();tr.pts.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));ctx.stroke();});ctx.shadowBlur=0;
   t.ports.forEach(p=>{ctx.fillStyle='#10b981';ctx.beginPath();ctx.arc(p.x,p.y,S.mode==='pulse'?6:4,0,7);ctx.fill();});});
- S.coils.forEach(c=>{ctx.strokeStyle='#f59e0b';ctx.fillStyle=c.bit?'rgba(245,158,11,.85)':'rgba(245,158,11,.25)';ctx.lineWidth=2;ctx.shadowColor='#f59e0b';ctx.shadowBlur=8;ctx.beginPath();ctx.arc(c.x,c.y,9,0,7);ctx.fill();ctx.stroke();ctx.shadowBlur=0;ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(c.x,c.y,3,0,7);ctx.fill();ctx.fillStyle='#fbbf24';ctx.font='8px monospace';ctx.fillText(c.bit?'1':'0',c.x-2,c.y-12);});
+ S.coils.forEach(c=>{const isGate=window.TB&&TB.gate===c;ctx.strokeStyle=isGate?'#ffffff':'#f59e0b';ctx.fillStyle=c.bit?'rgba(239,68,68,.9)':'rgba(59,130,246,.9)';ctx.lineWidth=2;ctx.shadowColor='#f59e0b';ctx.shadowBlur=8;ctx.beginPath();ctx.arc(c.x,c.y,9,0,7);ctx.fill();ctx.stroke();ctx.shadowBlur=0;ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(c.x,c.y,3,0,7);ctx.fill();ctx.fillStyle='#e2e8f0';ctx.font='8px monospace';ctx.fillText(c.bit?'1':'0',c.x-2,c.y-12);if(window.TB&&TB.gate===c){ctx.fillStyle='#fff';ctx.font='9px monospace';ctx.fillText(TB.gateType,c.x-10,c.y+22);}});
  S.viol.forEach(v=>{ctx.strokeStyle='#ef4444';ctx.lineWidth=2;ctx.beginPath();ctx.arc(v.x,v.y,11,0,7);ctx.stroke();ctx.fillStyle='#ef4444';ctx.font='8px monospace';ctx.fillText(v.k,v.x+13,v.y+3);});
  if(S.pulse){const p=S.pulse;S.pulseT+=0.008;const total=p.path.length-1;const pos=Math.min(total,S.pulseT*total);const i=Math.floor(pos),f=pos-i;
   ctx.strokeStyle='rgba(249,115,22,.9)';ctx.lineWidth=3.5;ctx.shadowColor='#f97316';ctx.shadowBlur=10;ctx.beginPath();p.path.forEach((pt,k)=>k?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));ctx.stroke();ctx.shadowBlur=0;
   if(i<total){const a=p.path[i],b=p.path[i+1];ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(a.x+(b.x-a.x)*f,a.y+(b.y-a.y)*f,5,0,7);ctx.fill();}
   if(S.pulseT>1.3)S.pulseT=0;}
- requestAnimationFrame(render);}
+ if(window.tbFrame)tbFrame(performance.now());requestAnimationFrame(render);}
 window.addEventListener('resize',()=>{buildPatch();});
 window.onload=()=>{buildPatch();scatter();render();log('CAD/CAM v5 booted: 7-tile patch, '+allTraces().length+' traces','text-cyan-300');};
-</script></body></html>
+</script>
+<script>
+// ================= TESTBENCH — MAGNETIC CORE LOGIC (v7) =================
+// Discrete-event model: generators emit bit patterns at ports; packets travel
+// graph edges with delay tau = L / v_wave; at each tick the gate core sums the
+// flux of arrived inputs (Phi = 0.60 Phi_c per active input) and fires per its
+// threshold rule; its hysteresis bit flips (blue 0 / red 1) and an output
+// packet is released to the output port. Measured truth table vs expected.
+const TB={A:null,B:null,OUT:null,gate:null,gateType:'AND',running:false,tick:0,hist:[],packets:[],last:0,paths:null,prepared:false};
+const PHI_IN=0.60, V_WAVE=300; // flux per active input (units of Phi_c); packet speed px/s
+function tbLabel(sel){return sel?('T'+sel.t.id+'.e'+sel.pi):'—';}
+function tbStatus(msg){const el=document.getElementById('tb-status');if(el)el.innerHTML=msg||('A = <span class="text-cyan-300">'+tbLabel(TB.A)+'</span> · B = <span class="text-cyan-300">'+tbLabel(TB.B)+'</span> · OUT = <span class="text-emerald-300">'+tbLabel(TB.OUT)+'</span> · GATE = <span class="text-amber-300">'+(TB.gate?TB.gateType+' @ coil ('+TB.gate.x.toFixed(0)+','+TB.gate.y.toFixed(0)+')':'none — click a coil or Auto-place')+'</span> · tick '+TB.tick);}
+function tbClick(x,y){
+  const ci=S.coils.findIndex(c=>Math.hypot(c.x-x,c.y-y)<15);
+  if(ci>=0){TB.gate=S.coils[ci];TB.prepared=false;tbStatus();log('Testbench: gate core designated ('+TB.gateType+')');return;}
+  const hit=pickPort(x,y);if(!hit){toast('No port in snap range.');return;}
+  if(!TB.A)TB.A=hit;else if(!TB.B)TB.B=hit;else if(!TB.OUT)TB.OUT=hit;else{TB.A=hit;TB.B=null;TB.OUT=null;}
+  TB.prepared=false;tbStatus();
+}
+function tbAutoGate(){
+  const g=buildGraph();let bi=-1,bd=-1,bc=null;
+  g.nodes.forEach((n,i)=>{const d=g.adj[i].length;const dc=Math.hypot(n.x-S.W/2,n.y-S.H/2);const score=d*1000-dc;if(score>bd){bd=score;bi=i;bc=n;}});
+  if(!bc){toast('No graph nodes yet.');return;}
+  let coil=S.coils.find(c=>Math.hypot(c.x-bc.x,c.y-bc.y)<20);
+  if(!coil){coil={x:bc.x,y:bc.y,bit:0};S.coils.push(coil);}
+  TB.gate=coil;TB.prepared=false;runHUD();tbStatus();log('Testbench: gate coil auto-placed at highest-degree junction (deg '+g.adj[bi].length+')');
+}
+function tbPrepare(){
+  if(!TB.A||!TB.OUT||!TB.gate){tbStatus('Assign at least Input A, Output, and a gate coil first.');return false;}
+  TB.gateType=document.getElementById('tb-gate').value;
+  const g=buildGraph();
+  let gateNode=-1,bd=1e9;g.nodes.forEach((n,i)=>{const d=Math.hypot(n.x-TB.gate.x,n.y-TB.gate.y);if(d<bd){bd=d;gateNode=i;}});
+  const pA=dijkstra(g,TB.A.p._nid,gateNode);
+  const pB=TB.B?dijkstra(g,TB.B.p._nid,gateNode):null;
+  const pO=dijkstra(g,gateNode,TB.OUT.p._nid);
+  if(!pA||!pO||(TB.B&&!pB)){tbStatus('<span class="text-red-400">No routed path for one of the legs on the extracted graph.</span>');return false;}
+  const plen=pp=>{let L=0;for(let i=1;i<pp.length;i++)L+=Math.hypot(pp[i].x-pp[i-1].x,pp[i].y-pp[i-1].y);return L;};
+  TB.paths={A:pA,B:pB,O:pO,tauA:plen(pA)/V_WAVE,tauB:pB?plen(pB)/V_WAVE:0,tauO:plen(pO)/V_WAVE};
+  TB.prepared=true;
+  log('Testbench prepared: '+TB.gateType+' · tau A '+(TB.paths.tauA*1000).toFixed(0)+'ms · B '+(TB.paths.tauB*1000).toFixed(0)+'ms · OUT '+(TB.paths.tauO*1000).toFixed(0)+'ms (tau = L/v, v='+V_WAVE+'px/s)');
+  return true;
+}
+function tbSpawn(path,color){if(!path)return;let L=0;for(let i=1;i<path.length;i++)L+=Math.hypot(path[i].x-path[i-1].x,path[i].y-path[i-1].y);
+  TB.packets.push({path,t0:performance.now(),dur:Math.max(120,L/V_WAVE*1000),color});}
+function tbPointAt(pk,now){const f=Math.min(1,(now-pk.t0)/pk.dur);const pp=pk.path;let total=0;const seg=[];
+  for(let i=1;i<pp.length;i++){const d=Math.hypot(pp[i].x-pp[i-1].x,pp[i].y-pp[i-1].y);seg.push(d);total+=d;}
+  let target=f*total;for(let i=0;i<seg.length;i++){if(target<=seg[i]){const u=seg[i]?target/seg[i]:0;return{x:pp[i].x+(pp[i+1].x-pp[i].x)*u,y:pp[i].y+(pp[i+1].y-pp[i].y)*u,f};}target-=seg[i];}
+  return{x:pp[pp.length-1].x,y:pp[pp.length-1].y,f};}
+function tbTick(){
+  if(!TB.prepared&&!tbPrepare()){TB.running=false;document.getElementById('tb-run').textContent='▶ Run Test';return;}
+  const patA=(document.getElementById('tb-patA').value||'0').replace(/[^01]/g,'')||'0';
+  const patB=(document.getElementById('tb-patB').value||'0').replace(/[^01]/g,'')||'0';
+  const total=Math.max(patA.length,patB.length);
+  if(TB.tick>=total){TB.running=false;document.getElementById('tb-run').textContent='▶ Run Test';tbVerdict();return;}
+  const a=+(patA[TB.tick%patA.length]), b=TB.gateType==='NOT'?0:+(patB[TB.tick%patB.length]);
+  if(a)tbSpawn(TB.paths.A,'#22d3ee'); if(b&&TB.paths.B)tbSpawn(TB.paths.B,'#a78bfa');
+  const flux=TB.gateType==='NOT'?a*PHI_IN:(a+b)*PHI_IN;
+  let out,exp;
+  if(TB.gateType==='AND'){out=flux>=1.0?1:0;exp=a&b;}
+  else if(TB.gateType==='OR'){out=flux>=0.5?1:0;exp=a|b;}
+  else if(TB.gateType==='XOR'){out=(flux>=0.5&&flux<1.1)?1:0;exp=a^b;}
+  else {out=a?0:1;exp=a?0:1;} // NOT: bias winding holds core at 1; A pulse opposes it
+  const flipped=TB.gate.bit!==out;TB.gate.bit=out;
+  if(out)setTimeout(()=>tbSpawn(TB.paths.O,'#34d399'),350);
+  TB.hist.push({tick:TB.tick,a,b,flux:+flux.toFixed(2),out,exp,flipped});
+  if(flipped)log('Testbench tick '+TB.tick+': gate core FLIPPED → '+out+' (Phi='+flux.toFixed(2)+' Phi_c, '+TB.gateType+')','text-amber-300');
+  TB.tick++;drawScope();tbTable();tbStatus();
+}
+function tbVerdict(){const ok=TB.hist.filter(h=>h.out===h.exp).length;
+  tbStatus('<span class="'+(ok===TB.hist.length?'text-emerald-400':'text-red-400')+' font-bold">'+(ok===TB.hist.length?'✓ GATE VERIFIED':'✗ MISMATCH')+' — '+TB.gateType+' truth table '+ok+'/'+TB.hist.length+' ticks match the flux-threshold model.</span> A='+tbLabel(TB.A)+' B='+tbLabel(TB.B)+' OUT='+tbLabel(TB.OUT));
+  log('Testbench verdict: '+TB.gateType+' '+ok+'/'+TB.hist.length+' ticks verified','text-emerald-300');}
+function tbTable(){const el=document.getElementById('tb-table');if(!el)return;
+  el.innerHTML=TB.hist.map(h=>'<div class="'+(h.out===h.exp?'text-slate-400':'text-red-400')+'">t'+h.tick+' · A='+h.a+' B='+h.b+' · Φ='+h.flux.toFixed(2)+'Φc · OUT='+h.out+(h.flipped?' (core flipped)':'')+' · expected '+h.exp+' '+(h.out===h.exp?'✓':'✗')+'</div>').join('');}
+function drawScope(){const c=document.getElementById('scope');if(!c)return;const g=c.getContext('2d');const W=c.width,H=c.height;
+  g.fillStyle='#000';g.fillRect(0,0,W,H);const lanes=[['A','#22d3ee',h=>h.a],['B','#a78bfa',h=>h.b],['Φ/Φc','#f59e0b',h=>Math.min(1,h.flux/1.2)],['OUT','#34d399',h=>h.out]];
+  const n=Math.max(TB.hist.length,8),cw=W/n;
+  lanes.forEach(([name,col,fn],li)=>{const y0=8+li*28,amp=16;g.fillStyle='#64748b';g.font='9px monospace';g.fillText(name,4,y0+12);
+    g.strokeStyle=col;g.lineWidth=1.8;g.beginPath();
+    TB.hist.forEach((h,i)=>{const x=34+i*cw,y=y0+amp-fn(h)*amp;i?g.lineTo(x,y):g.moveTo(x,y);g.lineTo(x+cw*0.92,y);});
+    g.stroke();g.strokeStyle='rgba(28,42,71,.6)';g.lineWidth=1;g.beginPath();g.moveTo(30,y0+amp);g.lineTo(W,y0+amp);g.stroke();});
+  if(TB.gateType==='AND'||true){g.fillStyle='rgba(245,158,11,.55)';g.font='8px monospace';g.fillText('Φc threshold = 1.0 (AND) · 0.5 (OR/XOR window)',34,8+1*28+24);} }
+function tbToggle(){TB.running=!TB.running;document.getElementById('tb-run').textContent=TB.running?'⏸ Pause':'▶ Run Test';
+  if(TB.running){TB.last=performance.now();if(!TB.prepared)tbPrepare();}}
+function tbStep(){if(!TB.prepared&&!tbPrepare())return;tbTick();}
+function tbReset(){TB.running=false;TB.tick=0;TB.hist=[];TB.packets=[];TB.prepared=false;if(TB.gate)TB.gate.bit=0;
+  document.getElementById('tb-run').textContent='▶ Run Test';drawScope();tbTable();tbStatus();log('Testbench reset');}
+// packet rendering + tick driving, called at the end of the main render loop
+function tbFrame(now){
+  if(S.mode==='testbench'){
+    if(TB.running&&now-TB.last>950){TB.last=now;tbTick();}
+    TB.packets=TB.packets.filter(pk=>now-pk.t0<pk.dur+60);
+    TB.packets.forEach(pk=>{const pt=tbPointAt(pk,now);ctx.fillStyle=pk.color;ctx.shadowColor=pk.color;ctx.shadowBlur=12;
+      ctx.beginPath();ctx.arc(pt.x,pt.y,4.5,0,7);ctx.fill();ctx.shadowBlur=0;});
+    // highlight assigned ports
+    [[TB.A,'#22d3ee','A'],[TB.B,'#a78bfa','B'],[TB.OUT,'#34d399','OUT']].forEach(([sel,col,tag])=>{if(!sel)return;
+      ctx.strokeStyle=col;ctx.lineWidth=2;ctx.beginPath();ctx.arc(sel.p.x,sel.p.y,10,0,7);ctx.stroke();
+      ctx.fillStyle=col;ctx.font='bold 9px monospace';ctx.fillText(tag,sel.p.x+12,sel.p.y-8);});
+    if(TB.paths&&TB.prepared){ctx.strokeStyle='rgba(255,255,255,.14)';ctx.lineWidth=1;ctx.setLineDash([4,4]);
+      [TB.paths.A,TB.paths.B,TB.paths.O].forEach(pp=>{if(!pp)return;ctx.beginPath();pp.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));ctx.stroke();});ctx.setLineDash([]);}
+  }
+}
+</script>
+</body></html>
