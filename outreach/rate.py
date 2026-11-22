@@ -15,9 +15,14 @@ WEIGHTS = {"capability_match": 0.35, "scale_fit": 0.20, "materials_access": 0.20
 
 def validate(t):
     errs = []
-    em = t.get("contact", {}).get("email", "")
-    if ".example" in em or "example." in em or not em:
-        errs.append(f"{t.get('name')}: placeholder/missing email")
+    em = t.get("contact", {}).get("email")
+    if em is None:
+        # null email is honest when the vendor publishes none (form only) —
+        # but then the contact must be marked unverified with a source.
+        if t.get("contact", {}).get("email_verified"):
+            errs.append(f"{t.get('name')}: null email but email_verified=true")
+    elif ".example" in em or "example." in em or not em:
+        errs.append(f"{t.get('name')}: placeholder email")
     if not t.get("contact", {}).get("source_url"):
         errs.append(f"{t.get('name')}: contact has no source_url")
     dims = t.get("rating", {}).get("dimensions", {})

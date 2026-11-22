@@ -142,3 +142,7 @@ figure.fig figcaption b { color: var(--fg); font-weight: 600; }
 .refs li { margin-bottom: 6px; }
 .refs .tag { margin-right: 8px; }
 video.motion { width: 100%; height: auto; display: block; background: #000; }
+.tabs { display: flex; gap: 4px; flex-wrap: wrap; margin: 14px 0 4px; border-bottom: 1px solid var(--line); }
+.tabs .tab { font-size: 0.72rem; letter-spacing: 0.12em; padding: 7px 14px; color: var(--fg-faint); text-decoration: none; border: 1px solid transparent; border-bottom: none; border-radius: 6px 6px 0 0; }
+.tabs .tab:hover { color: var(--fg); }
+.tabs .tab.on { color: var(--fg); border-color: var(--line); background: rgba(255,255,255,0.03); font-weight: 600; }

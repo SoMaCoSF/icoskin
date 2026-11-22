@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<!-- SOM-DOC-10910-v1.0.0 ISM-SCS CAD/CAM Engine v5 — Patch Editor, Skeleton/DRC, Sinogram, Pulse Sim -->
+<html lang="en" class="dark"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ISM-SCS CAD/CAM Engine v6 — GeoHex Patch · DRC · CAL Sinogram · Core-Memory Pulse</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<script>if(window.tailwind)tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans-serif'],mono:['JetBrains Mono','monospace']},colors:{aero:{950:'#040812',900:'#0a101f',800:'#111a2e',700:'#1c2a47',cyan:'#06b6d4',amber:'#f59e0b',emerald:'#10b981'}}}}};</script>
+<style>body{background:#040812;color:#e2e8f0}canvas{touch-action:none}.panel{border:1px solid rgba(6,182,212,.25);box-shadow:0 4px 24px rgba(0,0,0,.6)}input[type=range]{-webkit-appearance:none;background:#1c2a47;height:6px;border-radius:4px;width:100%}input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:#06b6d4;cursor:pointer;box-shadow:0 0 8px rgba(6,182,212,.8)}::-webkit-scrollbar{width:5px;height:5px}::-webkit-scrollbar-thumb{background:#1c2a47;border-radius:3px}.btn{padding:.45rem .7rem;border-radius:.5rem;font-size:11px;font-weight:600;transition:.15s}.tabbtn{padding:.4rem .6rem;border-radius:.5rem;font-size:11px;font-family:JetBrains Mono,monospace;border:1px solid #1c2a47;background:#111a2e;color:#94a3b8;cursor:pointer}.tabbtn.on{background:rgba(6,182,212,.18);border-color:#06b6d4;color:#a5f3fc}
+/* Fallback layout if Tailwind CDN is unreachable (offline / headless rigs) */
+header{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;background:rgba(10,16,31,.92);border-bottom:1px solid #1c2a47;padding:10px 16px;position:sticky;top:0;z-index:40}
+main{display:grid;grid-template-columns:300px minmax(0,1fr) 320px !important;gap:16px;padding:16px;max-width:1920px;margin:0 auto;width:100%;box-sizing:border-box}
+main>aside:first-of-type{grid-column:1}main>section{grid-column:2;min-width:0}main>aside:last-of-type{grid-column:3}
+@media(max-width:1100px){main>aside:first-of-type,main>section,main>aside:last-of-type{grid-column:1}}
+@media(max-width:1100px){main{grid-template-columns:1fr}}
+aside,section{display:flex;flex-direction:column;gap:16px;min-width:0}
+.bg-aero-900{background:#0a101f}.bg-aero-950{background:#040812}.bg-aero-800{background:#111a2e}
+.rounded-xl{border-radius:12px}.rounded-lg{border-radius:8px}.p-4{padding:16px}.p-3{padding:12px}.p-2\.5{padding:10px}
+.space-y-3>*+*{margin-top:12px}.space-y-2>*+*{margin-top:8px}.space-y-1>*+*{margin-top:4px}
+body{margin:0}.flex{display:flex}.flex-col{flex-direction:column}.grid{display:grid}.grid-cols-2{grid-template-columns:1fr 1fr}.gap-2{gap:8px}.gap-3{gap:12px}.gap-4{gap:16px}
+.items-center{align-items:center}.justify-between{justify-content:space-between}.flex-1{flex:1}.w-full{width:100%}
+.text-xs{font-size:12px}.text-sm{font-size:14px}.text-white{color:#fff}.text-slate-400{color:#94a3b8}.text-slate-300{color:#cbd5e1}.text-slate-500{color:#64748b}
+.text-cyan-400{color:#22d3ee}.text-cyan-300{color:#67e8f9}.text-amber-400{color:#fbbf24}.text-amber-300{color:#fcd34d}.text-emerald-400{color:#34d399}.text-emerald-300{color:#6ee7b7}.text-red-400{color:#f87171}.text-purple-400{color:#c084fc}
+.font-mono{font-family:'JetBrains Mono',monospace}.font-bold{font-weight:700}.font-semibold{font-weight:600}.uppercase{text-transform:uppercase}.tracking-wider{letter-spacing:.05em}
+.border-b{border-bottom:1px solid #1c2a47}.border{border:1px solid #1c2a47}.border-aero-700{border-color:#1c2a47}.pb-2{padding-bottom:8px}.pt-1{padding-top:4px}.pt-2{padding-top:8px}.pt-3{padding-top:12px}.hidden{display:none}
+canvas#cv{width:100%;height:100%;min-height:480px;display:block}select,input[type=number]{box-sizing:border-box}
+h1{font-size:16px;margin:0}h2{font-size:12px;margin:0}p{margin:0}</style></head>
+<body class="min-h-screen flex flex-col">
+<header class="bg-aero-900/90 border-b border-aero-700 px-4 py-2.5 flex flex-wrap items-center justify-between gap-2 sticky top-0 z-40">
+<div><div class="flex items-center gap-2"><h1 class="font-bold text-sm sm:text-base text-white tracking-wide">ISM-SCS CAD/CAM ENGINE <span class="text-cyan-400">v6</span></h1><span class="px-2 py-0.5 text-[10px] font-mono bg-amber-500/10 text-amber-400 border border-amber-500/30 rounded">PATCH · DRC · CAL · PULSE</span></div>
+<p class="text-[11px] text-slate-400 font-mono">Multi-Tile GeoHex Patch Editor • Medial-Axis Skeleton + DRC • Tomographic Sinogram • Transient Core-Memory Pulse</p></div>
+<div class="flex gap-2"><a href="/" class="btn bg-aero-800 hover:bg-aero-700 text-slate-200 border border-aero-700" style="text-decoration:none;display:inline-flex;align-items:center">← ICOSKIN BRIEF</a><button onclick="exportStackJSON()" class="btn bg-aero-800 hover:bg-aero-700 text-cyan-300 border border-cyan-500/40">Export Stack JSON</button><button onclick="exportAllLayers()" class="btn bg-cyan-600 hover:bg-cyan-500 text-white shadow-lg shadow-cyan-600/20">Export 3-Layer Masks (PNG)</button></div></header>
+
+<main class="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-4 p-4 max-w-[1920px] w-full mx-auto">
+<!-- LEFT -->
+<aside class="lg:col-span-3 flex flex-col gap-4">
+<div class="bg-aero-900 rounded-xl p-4 panel space-y-3">
+<h2 class="text-xs font-bold uppercase tracking-wider text-cyan-400 border-b border-aero-700 pb-2">1 · Chladni Source (Centre Tile)</h2>
+<div class="space-y-1"><div class="flex justify-between text-xs"><span class="text-slate-400">Frequency</span><span id="lbl-freq" class="font-mono text-cyan-400 font-semibold">640 Hz</span></div><input type="range" id="inp-freq" min="120" max="2400" step="10" value="640" oninput="sync()"></div>
+<div class="grid grid-cols-2 gap-3"><div class="space-y-1"><div class="flex justify-between text-xs"><span class="text-slate-400">Mode N</span><span id="lbl-n" class="font-mono text-white font-bold">3</span></div><input type="range" id="inp-n" min="1" max="9" step="1" value="3" oninput="sync()"></div>
+<div class="space-y-1"><div class="flex justify-between text-xs"><span class="text-slate-400">Mode M</span><span id="lbl-m" class="font-mono text-white font-bold">5</span></div><input type="range" id="inp-m" min="1" max="9" step="1" value="5" oninput="sync()"></div></div>
+<div class="space-y-1"><div class="flex justify-between text-xs"><span class="text-slate-400">Trace width</span><span id="lbl-w" class="font-mono text-emerald-400">45 µm</span></div><input type="range" id="inp-w" min="10" max="160" step="5" value="45" oninput="sync()"></div>
+<div class="space-y-1"><div class="flex justify-between text-xs"><span class="text-slate-400">Min spacing rule</span><span id="lbl-sp" class="font-mono text-emerald-400">800 µm</span></div><input type="range" id="inp-sp" min="100" max="2000" step="50" value="800" oninput="sync()"></div>
+<div class="space-y-1"><div class="flex justify-between text-xs"><span class="text-slate-400">Field source (solver)</span></div>
+<select id="inp-field" class="w-full bg-aero-950 border border-aero-700 rounded px-2 py-1.5 font-mono text-white text-[11px]" onchange="buildPatch();scatter()">
+<option value="chladni" selected>Chladni |Z| — plate standing wave</option>
+<option value="gorkov">Gor'kov proxy — U = f1·p² − f2·|∇Z|² (particle trapping)</option></select>
+<p class="text-[10px] text-slate-500">Any scalar field feeds the same vectorizer — this is the seam where a fluid/field solver (fluid.somacosf.com class) plugs in.</p></div>
+<div class="space-y-1"><div class="flex justify-between text-xs"><span class="text-slate-400">Vectorizer</span></div>
+<select id="inp-vec" class="w-full bg-aero-950 border border-aero-700 rounded px-2 py-1.5 font-mono text-white text-[11px]" onchange="buildPatch()">
+<option value="zs" selected>Zhang–Suen thinning → graph → Douglas–Peucker (v6)</option>
+<option value="greedy">Greedy chaining (v5, comparison baseline)</option></select></div>
+<div class="flex gap-2 pt-1"><button onclick="regen()" class="btn flex-1 bg-emerald-600/20 border border-emerald-500/40 text-emerald-300 hover:bg-emerald-600/30">Re-extract Skeleton</button><button onclick="scatter()" class="btn bg-aero-800 border border-aero-700 text-slate-300 hover:bg-aero-700">Re-seed Particles</button></div>
+<label class="flex items-center justify-between text-xs bg-aero-950/80 p-2.5 rounded-lg border border-aero-700"><span><span class="text-white font-medium">Pentagon defect</span><br><span class="text-[10px] text-slate-400">NE tile → 5-port defect (1 of 12 on a closed icosphere)</span></span><input type="checkbox" id="chk-pent" class="w-4 h-4 accent-amber-500" onchange="buildPatch()"></label>
+<label class="flex items-center justify-between text-xs bg-aero-950/80 p-2.5 rounded-lg border border-aero-700"><span><span class="text-white font-medium">Show particles</span><br><span class="text-[10px] text-slate-400">3,200 precursor particles, centre tile</span></span><input type="checkbox" id="chk-part" class="w-4 h-4 accent-cyan-500" checked></label>
+</div>
+
+<div class="bg-aero-900 rounded-xl p-4 panel space-y-3">
+<h2 class="text-xs font-bold uppercase tracking-wider text-amber-400 border-b border-aero-700 pb-2">2 · Design Rule Check</h2>
+<div class="flex gap-2"><button onclick="runDRC()" class="btn flex-1 bg-amber-500/15 border border-amber-500/40 text-amber-300 hover:bg-amber-500/25">Run DRC</button><button onclick="clearDRC()" class="btn bg-aero-800 border border-aero-700 text-slate-300">Clear</button></div>
+<div id="drc-out" class="font-mono text-[11px] space-y-1 text-slate-400">DRC not run yet. Rules: min trace spacing, trace–trace shorts, Fe-MG coil clearance (≥ 2.5× coil radius from foreign traces), coil–coil ≥ 28 µm centre distance.</div>
+</div>
+
+<div class="bg-aero-900 rounded-xl p-4 panel space-y-3 flex-1">
+<h2 class="text-xs font-bold uppercase tracking-wider text-emerald-400 border-b border-aero-700 pb-2">3 · Edge-Port Handshakes (imbuuid)</h2>
+<div id="shake-out" class="font-mono text-[11px] space-y-1 text-slate-400">—</div>
+<p class="text-[10px] text-slate-500 leading-relaxed">Shared edge = one geometric port seen by two tiles. PASS when both tiles land a trace endpoint within the snap radius of that port. A pentagon tile has 5 ports: its missing edge is a defect port, flagged, never silently bridged.</p>
+</div>
+</aside>
+
+<!-- CENTER -->
+<section class="lg:col-span-6 bg-aero-900 rounded-xl p-3 panel flex flex-col min-h-[520px]">
+<div class="flex flex-wrap items-center justify-between gap-2 pb-2 px-1">
+<div class="flex gap-1.5"><button class="tabbtn on" id="tab-patch" onclick="setMode('patch')">PATCH EDITOR</button><button class="tabbtn" id="tab-pulse" onclick="setMode('pulse')">PULSE SIM</button><button class="tabbtn" id="tab-sino" onclick="setMode('sino')">SINOGRAM / CAL</button></div>
+<div class="font-mono text-[11px] flex gap-2"><span class="px-2 py-0.5 rounded bg-aero-950 border border-aero-700 text-cyan-400">TILES <strong id="hud-tiles" class="text-white">7</strong></span><span class="px-2 py-0.5 rounded bg-aero-950 border border-aero-700 text-emerald-400">TRACES <strong id="hud-traces" class="text-white">0</strong></span><span class="px-2 py-0.5 rounded bg-aero-950 border border-aero-700 text-amber-400">COILS <strong id="hud-coils" class="text-white">0</strong></span></div></div>
+<div class="relative flex-1 w-full rounded-lg overflow-hidden bg-aero-950 border border-aero-700/80"><canvas id="cv" class="w-full h-full cursor-crosshair"></canvas></div>
+<div id="mode-hint" class="pt-2 px-1 text-[11px] font-mono text-slate-400">PATCH: click a nodal vertex in any tile to place / remove an Fe-MG core-memory coil. Neighbour tiles inherit rotated Chladni modes (N,M offset by axial coordinate) so port continuity is a real test, not a copy.</div>
+<div id="sino-wrap" class="hidden pt-3"><div class="flex items-center justify-between pb-1"><span class="text-xs font-mono text-cyan-300">RADON SINOGRAM — centre tile, Layer 2 (Cu/Fe-MG)</span><button onclick="buildSinogram()" class="btn bg-aero-800 border border-aero-700 text-slate-200">Recompute</button></div><canvas id="sino" width="720" height="220" class="w-full rounded border border-aero-700 bg-black"></canvas><p class="text-[10px] text-slate-500 pt-1 font-mono">θ 0–180° × detector offset. Each column = line-integral projection of the extracted trace field at that angle — the input CAL dose compensation consumes. Schematic Radon on the vector field, not a voxel CT reconstruction.</p></div>
+</section>
+
+<!-- RIGHT -->
+<aside class="lg:col-span-3 flex flex-col gap-4">
+<div class="bg-aero-900 rounded-xl p-4 panel space-y-3">
+<h2 class="text-xs font-bold uppercase tracking-wider text-cyan-400 border-b border-aero-700 pb-2">4 · Transient Pulse Simulator</h2>
+<p class="text-[11px] text-slate-400">In PULSE mode, click two edge ports. The pulse routes on the extracted mycelial graph (Dijkstra over trace segments, inter-tile port jumps allowed), with per-segment V-drop and Joule heating.</p>
+<div class="grid grid-cols-2 gap-2 text-xs"><div><label class="text-[10px] text-slate-400 block mb-1">Drive (mA)</label><input type="number" id="inp-i" value="120" min="1" max="5000" class="w-full bg-aero-950 border border-aero-700 rounded px-2 py-1 font-mono text-white"></div>
+<div><label class="text-[10px] text-slate-400 block mb-1">Material</label><select id="inp-mat" class="w-full bg-aero-950 border border-aero-700 rounded px-2 py-1 font-mono text-white text-[11px]"><option value="cnt">CNT ρ=1e-5</option><option value="cu" selected>Cu ρ=1.68e-8</option><option value="femg">Fe-MG ρ=1.3e-6</option></select></div></div>
+<div id="pulse-out" class="font-mono text-[11px] space-y-1 text-slate-400 bg-aero-950/70 border border-aero-700 rounded-lg p-2.5">No pulse yet. Ports selected: <span class="text-white">0 / 2</span></div>
+<canvas id="vchart" width="300" height="70" class="w-full rounded border border-aero-700 bg-black"></canvas>
+<p class="text-[10px] text-slate-500 font-mono">Voltage along path (source → sink). Coils within 26 px of the path flip hysteresis state — the write event.</p>
+</div>
+<div class="bg-aero-900 rounded-xl p-4 panel space-y-3 flex-1">
+<h2 class="text-xs font-bold uppercase tracking-wider text-purple-400 border-b border-aero-700 pb-2">5 · Layer Stack — MSLA / CAL</h2>
+<div class="space-y-2 text-[11px] font-mono">
+<div class="p-2.5 rounded-lg border border-cyan-500/30 bg-aero-950/70"><span class="text-cyan-300 font-bold">L1 · CNT SCAFFOLD</span><br><span class="text-slate-400">Skeleton traces at full width + hex frames. Structural cure pass.</span></div>
+<div class="p-2.5 rounded-lg border border-amber-500/30 bg-aero-950/70"><span class="text-amber-300 font-bold">L2 · Cu / Fe-MG</span><br><span class="text-slate-400">Conductive traces at 0.6× width + coil rings. Core-memory nodes.</span></div>
+<div class="p-2.5 rounded-lg border border-emerald-500/30 bg-aero-950/70"><span class="text-emerald-300 font-bold">L3 · AEROGEL CHANNELS</span><br><span class="text-slate-400">Inverse field: everything except traces/coils = infiltration voids, ¹⁰B/⁷¹Ga doped, vacuum-sealed.</span></div></div>
+<div class="bg-aero-950/90 p-2.5 rounded-lg border border-cyan-500/30 font-mono text-[11px]"><div class="text-cyan-400 font-semibold">CENTRE TILE ADDRESS</div><div id="addr" class="text-slate-300 truncate">imbuuid://ico/shell-3/face-14/subhex-5?n=3&amp;m=5</div><div class="text-[10px] text-slate-500">Shell 3 · Face 14 · Sub-Hex 5 — ray-vector from (0,0,0)</div></div>
+<div id="log" class="font-mono text-[10.5px] space-y-1 text-slate-400 h-28 overflow-y-auto"></div>
+</div>
+</aside></main>
+<div id="toast" class="fixed bottom-4 right-4 z-50 hidden bg-aero-800 border border-cyan-500 text-white px-4 py-2.5 rounded-lg text-xs font-mono"></div>
+<script>
+const MATS={cnt:{rho:1e-5,mu:1.05,color:'#06b6d4',name:'CNT'},cu:{rho:1.68e-8,mu:0.999,color:'#f97316',name:'Cu'},femg:{rho:1.3e-6,mu:8500,color:'#f59e0b',name:'Fe-MG'}};
+const S={freq:640,N:3,M:5,widthUm:45,spacingUm:800,mode:'patch',tiles:[],coils:[],particles:[],viol:[],pulseSel:[],pulse:null,pulseT:0,W:0,H:0,R:0};
+const cv=document.getElementById('cv'),ctx=cv.getContext('2d');
+function log(m,c){const el=document.getElementById('log');const d=document.createElement('div');if(c)d.className=c;d.textContent='['+new Date().toTimeString().slice(0,8)+'] '+m;el.prepend(d);while(el.children.length>40)el.lastChild.remove();}
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.remove('hidden');setTimeout(()=>t.classList.add('hidden'),2600);}
+function chladni(nx,ny,n,m){const fs=(S.freq-640)*0.0004;return Math.cos((n+fs)*Math.PI*nx)*Math.cos(m*Math.PI*ny)-Math.cos(m*Math.PI*nx)*Math.cos((n+fs)*Math.PI*ny);}
+// axial neighbours in pointy-top hex layout (flat-top axial -> use angle layout below)
+const AX=[[0,0],[1,0],[1,-1],[0,-1],[-1,0],[-1,1],[0,1]];
+function hexVerts(cx,cy,r,sides){const v=[];for(let i=0;i<sides;i++){const a=Math.PI/3*i-Math.PI/6;v.push({x:cx+r*Math.cos(a),y:cy+r*Math.sin(a)});}return v;}
+function portsOf(tile){const p=[];const sides=tile.verts.length;for(let i=0;i<sides;i++){const a=tile.verts[i],b=tile.verts[(i+1)%sides];p.push({x:(a.x+b.x)/2,y:(a.y+b.y)/2,edge:i,tile:tile.id});}return p;}
+function insideHex(px,py,cx,cy,r){const dx=Math.abs(px-cx),dy=Math.abs(py-cy);if(dx>r*0.866||dy>r)return false;return (r*0.866-dx)*1.732>=(dy-r/2);}
+function buildPatch(){
+  const rect=cv.parentElement.getBoundingClientRect();if(rect.width<240||rect.height<240)return;const dpr=devicePixelRatio||1;
+  cv.width=rect.width*dpr;cv.height=rect.height*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);S.W=rect.width;S.H=rect.height;
+  const R=Math.min(S.W,S.H)/5.4;S.R=R;const cx=S.W/2,cy=S.H/2;const pent=document.getElementById('chk-pent').checked;
+  S.tiles=AX.map((a,i)=>{const dx=(a[0])*R*1.74,dy=(a[1])*R*1.5+(a[0]%2?0:0)+ (a[1])*0 + (Math.abs(a[0])===1&&a[1]!==0? R*0.75*Math.sign(a[1])*0:0);
+    // proper pointy-top axial->pixel: x=R*sqrt3*(q+r/2), y=R*1.5*r
+    const px=cx+R*Math.sqrt(3)*(a[0]+a[1]/2), py=cy+R*1.5*a[1];
+    const sides=(pent&&i===2)?5:6;
+    const t={id:i,q:a[0],r:a[1],cx:px,cy:py,R:R*(sides===5?0.94:1),sides,n:S.N+((a[0]+a[1]+9)%3)-1,m:S.M+((a[1]-a[0]+9)%3)-1,traces:[],nodes:[]};
+    t.verts=hexVerts(px,py,t.R,sides);t.ports=portsOf(t);return t;});
+  S.tiles.forEach(extractTile);updateHandshakes();runHUD();
+  document.getElementById('addr').textContent=`imbuuid://ico/shell-3/face-14/subhex-5?n=${S.N}&m=${S.M}&patch=7tile`;
+}
+function fieldVal(nx,ny,n,m,src){
+  const z=chladni(nx,ny,n,m);
+  if(src!=='gorkov')return Math.abs(z);
+  const e=0.03,gx=(chladni(nx+e,ny,n,m)-chladni(nx-e,ny,n,m))/(2*e),gy=(chladni(nx,ny+e,n,m)-chladni(nx,ny-e,n,m))/(2*e);
+  return z*z-0.6*(gx*gx+gy*gy)/40; // Gor'kov proxy: pressure term vs velocity term, plate-mode p~Z, v~grad Z (normalised)
+}
+function fieldSrc(){const el=document.getElementById('inp-field');return el?el.value:'chladni';}
+function vecMode(){const el=document.getElementById('inp-vec');return el?el.value:'zs';}
+// Zhang-Suen thinning on a binary grid (Uint8, w*h). Returns thinned grid.
+function zhangSuen(img,w,h){
+  const P=(x,y)=>(x<0||y<0||x>=w||y>=h)?0:img[y*w+x];
+  let changed=true,guard=0;
+  while(changed&&guard++<200){changed=false;
+    for(let step=0;step<2;step++){const del=[];
+      for(let y=1;y<h-1;y++)for(let x=1;x<w-1;x++){if(!img[y*w+x])continue;
+        const p2=P(x,y-1),p3=P(x+1,y-1),p4=P(x+1,y),p5=P(x+1,y+1),p6=P(x,y+1),p7=P(x-1,y+1),p8=P(x-1,y),p9=P(x-1,y-1);
+        const seq=[p2,p3,p4,p5,p6,p7,p8,p9];const B=seq.reduce((a,b)=>a+b,0);if(B<2||B>6)continue;
+        let A=0;for(let i=0;i<8;i++)if(seq[i]===0&&seq[(i+1)%8]===1)A++;if(A!==1)continue;
+        if(step===0){if(p2*p4*p6!==0)continue;if(p4*p6*p8!==0)continue;}else{if(p2*p4*p8!==0)continue;if(p2*p6*p8!==0)continue;}
+        del.push(y*w+x);}
+      if(del.length){changed=true;del.forEach(i=>img[i]=0);}}}
+  return img;
+}
+// Douglas-Peucker polyline simplification
+function dpSimplify(pts,eps){if(pts.length<3)return pts;
+  const keep=new Array(pts.length).fill(false);keep[0]=keep[pts.length-1]=true;
+  (function rec(a,b){let md=0,mi=-1;const A=pts[a],B=pts[b];
+    for(let i=a+1;i<b;i++){const d=segDist(pts[i],A,B);if(d>md){md=d;mi=i;}}
+    if(md>eps&&mi>0){keep[mi]=true;rec(a,mi);rec(mi,b);}})(0,pts.length-1);
+  return pts.filter((_,i)=>keep[i]);
+}
+function extractTileZS(t){
+  t.traces=[];t.nodes=[];
+  const res=56,src=fieldSrc(),cut=src==='gorkov'?0.02:0.14;
+  const stepPx=(t.R*2)/res,w=res,h=res,img=new Uint8Array(w*h);
+  const cellXY=(i,j)=>({x:t.cx-t.R+ (i+0.5)*stepPx, y:t.cy-t.R+(j+0.5)*stepPx});
+  for(let j=0;j<h;j++)for(let i=0;i<w;i++){const{x,y}=cellXY(i,j);
+    if(!insideHex(x,y,t.cx,t.cy,t.R*0.97))continue;
+    if(fieldVal((x-t.cx)/t.R,(y-t.cy)/t.R,t.n,t.m,src)<cut){img[j*w+i]=1;if((i+j)%2===0)t.nodes.push({x,y});}}
+  zhangSuen(img,w,h);
+  // vectorize: skeleton pixels -> graph chains between endpoints/junctions
+  const key=(i,j)=>j*w+i, skel=new Set();for(let j=0;j<h;j++)for(let i=0;i<w;i++)if(img[j*w+i])skel.add(key(i,j));
+  const nbrs=(i,j)=>{const out=[];for(let dj=-1;dj<=1;dj++)for(let di=-1;di<=1;di++){if(!di&&!dj)continue;if(skel.has(key(i+di,j+dj)))out.push([i+di,j+dj]);}return out;};
+  const deg=new Map();skel.forEach(k=>{const i=k%w,j=(k/w)|0;deg.set(k,nbrs(i,j).length);});
+  const visitedEdge=new Set();const ekey=(a,b)=>a<b?a+'_'+b:b+'_'+a;
+  function walk(si,sj){const chain=[[si,sj]];let pi=-1,pj=-1,ci=si,cj=sj;
+    while(true){const ns=nbrs(ci,cj).filter(([a,b])=>!(a===pi&&b===pj)&&!visitedEdge.has(ekey(key(ci,cj),key(a,b))));
+      if(!ns.length)break;const[a,b]=ns[0];visitedEdge.add(ekey(key(ci,cj),key(a,b)));chain.push([a,b]);pi=ci;pj=cj;ci=a;cj=b;
+      if(deg.get(key(ci,cj))!==2)break;if(ci===si&&cj===sj)break;}
+    return chain;}
+  const chains=[];
+  skel.forEach(k=>{const i=k%w,j=(k/w)|0;if(deg.get(k)!==2){nbrs(i,j).forEach(([a,b])=>{if(!visitedEdge.has(ekey(k,key(a,b)))){const c=walk(i,j);if(c.length>1)chains.push(c);}});}});
+  skel.forEach(k=>{const i=k%w,j=(k/w)|0;const ns=nbrs(i,j);if(ns.some(([a,b])=>!visitedEdge.has(ekey(k,key(a,b))))){const c=walk(i,j);if(c.length>2)chains.push(c);}});
+  chains.forEach(c=>{let pts=c.map(([i,j])=>cellXY(i,j));
+    pts=dpSimplify(pts,1.6);
+    let len=0;for(let i=1;i<pts.length;i++)len+=Math.hypot(pts[i].x-pts[i-1].x,pts[i].y-pts[i-1].y);
+    if(pts.length>=2&&len>=9){snapPorts(t,pts);t.traces.push({pts,tile:t.id});}});
+}
+function extractTile(t){ if(vecMode()==='zs') extractTileZS(t); else extractTileGreedy(t); }
+function extractTileGreedy(t){
+  t.traces=[];t.nodes=[];const grid=22,step=(t.R*1.75)/grid,cut=0.13;
+  const nodes=[];
+  for(let gx=-grid/2;gx<=grid/2;gx++)for(let gy=-grid/2;gy<=grid/2;gy++){
+    const px=t.cx+gx*step,py=t.cy+gy*step;if(!insideHex(px,py,t.cx,t.cy,t.R*0.97))continue;
+    if(Math.abs(chladni((px-t.cx)/t.R,(py-t.cy)/t.R,t.n,t.m))<cut)nodes.push({x:px,y:py,v:false});}
+  t.nodes=nodes;const maxD=step*1.7;
+  for(let i=0;i<nodes.length;i++){if(nodes[i].v)continue;const chain=[nodes[i]];nodes[i].v=true;let cur=nodes[i],go=true;
+    while(go){go=false;let bi=-1,bd=maxD;for(let j=0;j<nodes.length;j++){if(nodes[j].v)continue;const d=Math.hypot(nodes[j].x-cur.x,nodes[j].y-cur.y);if(d<bd){bd=d;bi=j;}}
+      if(bi>=0){nodes[bi].v=true;cur=nodes[bi];chain.push(cur);go=true;}}
+    if(chain.length>=3){snapPorts(t,chain);t.traces.push({pts:chain,tile:t.id});}}
+}
+function snapPorts(t,chain){const rad=t.R*0.30;[0,chain.length-1].forEach((idx,k)=>{const pt=chain[idx];let np=null,md=rad;t.ports.forEach(p=>{const d=Math.hypot(p.x-pt.x,p.y-pt.y);if(d<md){md=d;np=p;}});if(np){if(k===0)chain.unshift({x:np.x,y:np.y,port:np});else chain.push({x:np.x,y:np.y,port:np});}});}
+function allTraces(){return S.tiles.flatMap(t=>t.traces);}
+function updateHandshakes(){
+  const out=document.getElementById('shake-out');let rows=[],pass=0,total=0,fail=0,defect=0;const seen=new Set();
+  for(let i=0;i<S.tiles.length;i++)for(let j=i+1;j<S.tiles.length;j++){const a=S.tiles[i],b=S.tiles[j];
+    // shared edge: ports within 3px of each other (dedupe by location — one shared edge, one handshake)
+    a.ports.forEach(pa=>{b.ports.forEach(pb=>{if(Math.hypot(pa.x-pb.x,pa.y-pb.y)<4){const sk=Math.round(pa.x)+','+Math.round(pa.y);if(seen.has(sk))return;seen.add(sk);total++;
+      const aHit=a.traces.some(tr=>tr.pts.some(pt=>Math.hypot(pt.x-pa.x,pt.y-pa.y)<2));
+      const bHit=b.traces.some(tr=>tr.pts.some(pt=>Math.hypot(pt.x-pb.x,pt.y-pb.y)<2));
+      const ok=aHit&&bHit;if(ok)pass++;else fail++;
+      rows.push(`<div class="${ok?'text-emerald-400':'text-red-400'}">${ok?'✓ PASS':'✗ OPEN'} T${a.id}↔T${b.id} · e${pa.edge}/e${pb.edge} · imbuuid handshake ${ok?'locked':'no trace on '+(aHit?'B':'A')+' side'}</div>`);}});});}
+  // pentagon missing edge: a 5-sided tile has one neighbour direction with no port pair at close range -> count as defect if pent on
+  if(document.getElementById('chk-pent').checked){defect=1;rows.push('<div class="text-amber-400">⚠ DEFECT T2 pentagon: 5 ports only — missing edge is a defect port by geometry (12 per closed shell). Not bridged.</div>');}
+  out.innerHTML=(rows.length?rows.join(''):'<span class="text-slate-500">No shared edges found — geometry error.</span>')+`<div class="pt-1 text-slate-300 border-t border-aero-700 mt-1">HANDSHAKES ${pass}/${total} PASS · ${fail} OPEN${defect?' · 1 DEFECT':''}</div>`;
+}
+function runHUD(){document.getElementById('hud-traces').textContent=allTraces().length;document.getElementById('hud-coils').textContent=S.coils.length;document.getElementById('hud-tiles').textContent=S.tiles.length;}
+</script>
+<script>
+// ---------- particles (centre tile) ----------
+function scatter(){const t=S.tiles[0];if(!t)return;S.particles=[];let c=0;while(c<3200){const px=t.cx+(Math.random()*2-1)*t.R,py=t.cy+(Math.random()*2-1)*t.R;if(insideHex(px,py,t.cx,t.cy,t.R*0.97))S.particles.push({x:px,y:py,vx:0,vy:0}),c++;}}
+function stepParticles(){const t=S.tiles[0];if(!t||!document.getElementById('chk-part').checked)return;const eps=0.02;
+ for(const p of S.particles){const nx=(p.x-t.cx)/t.R,ny=(p.y-t.cy)/t.R;const e=Math.abs(chladni(nx,ny,t.n,t.m));
+  const gx=(Math.abs(chladni(nx+eps,ny,t.n,t.m))-Math.abs(chladni(nx-eps,ny,t.n,t.m)))/(2*eps),gy=(Math.abs(chladni(nx,ny+eps,t.n,t.m))-Math.abs(chladni(nx,ny-eps,t.n,t.m)))/(2*eps);
+  const j=e*1.6;p.vx=(p.vx-gx*0.35+(Math.random()-.5)*j)*0.86;p.vy=(p.vy-gy*0.35+(Math.random()-.5)*j)*0.86;p.x+=p.vx;p.y+=p.vy;
+  if(!insideHex(p.x,p.y,t.cx,t.cy,t.R*0.97)){p.x=t.cx+(p.x-t.cx)*0.9;p.y=t.cy+(p.y-t.cy)*0.9;}}}
+// ---------- DRC ----------
+function segDist(p,a,b){const dx=b.x-a.x,dy=b.y-a.y,L=dx*dx+dy*dy||1;let u=((p.x-a.x)*dx+(p.y-a.y)*dy)/L;u=Math.max(0,Math.min(1,u));return Math.hypot(p.x-(a.x+u*dx),p.y-(a.y+u*dy));}
+function runDRC(){const trs=allTraces();const pxPerUm=(S.R*2)/(50*1000)*1000; // tile flat-to-flat 50mm -> px per um: R*~1.732 px = 25000um radius-ish; use width scale below
+ const pxPerMm=S.R*1.732/50, umPerPx=1000/pxPerMm;
+ const minPx=S.spacingUm*umPerPx/1000*1000/1000* (1000/ (1000/pxPerMm)) ; const minDistPx=S.spacingUm/ (1000/pxPerMm);
+ let spacing=0,shorts=0,coilClr=0;S.viol=[];
+ // spacing + shorts: sample points of distinct traces
+ for(let i=0;i<trs.length;i++)for(let j=i+1;j<trs.length;j++){
+   const A=trs[i].pts,B=trs[j].pts;
+   // joined at a skeleton junction / shared endpoint = one net, not a violation
+   const endsA=[A[0],A[A.length-1]],endsB=[B[0],B[B.length-1]];
+   let joined=false;
+   for(const e of endsA)for(const q of B)if(Math.hypot(e.x-q.x,e.y-q.y)<3.5)joined=true;
+   for(const e of endsB)for(const q of A)if(Math.hypot(e.x-q.x,e.y-q.y)<3.5)joined=true;
+   if(joined)continue;
+   let mn=1e9,mp=null,mq=null;
+   for(const p of A)for(const q of B){const d=Math.hypot(p.x-q.x,p.y-q.y);if(d<mn){mn=d;mp=p;mq=q;}}
+   // a short is a crossing of interiors; touching at endpoints was handled above
+   const isEnd=(tr,pt)=>pt===tr.pts[0]||pt===tr.pts[tr.pts.length-1];
+   if(mn<2.5&&!isEnd(trs[i],mp)&&!isEnd(trs[j],mq)){shorts++;S.viol.push({x:(mp.x+mq.x)/2,y:(mp.y+mq.y)/2,k:'SHORT'});}
+   else if(mn<minDistPx){spacing++;S.viol.push({x:(mp.x+mq.x)/2,y:(mp.y+mq.y)/2,k:'SPACE '+Math.round(mn*(1000/pxPerMm))+'µm'});}}
+ // coil clearance: coil vs traces not passing through it, coil-coil
+ for(const c of S.coils){for(const tr of trs){let mn=1e9;for(let i=1;i<tr.pts.length;i++)mn=Math.min(mn,segDist(c,tr.pts[i-1],tr.pts[i]));if(mn>13&&mn<22){coilClr++;S.viol.push({x:c.x,y:c.y,k:'COIL-CLR'});break;}}}
+ for(let i=0;i<S.coils.length;i++)for(let j=i+1;j<S.coils.length;j++){const d=Math.hypot(S.coils[i].x-S.coils[j].x,S.coils[i].y-S.coils[j].y);if(d<28){coilClr++;S.viol.push({x:(S.coils[i].x+S.coils[j].x)/2,y:(S.coils[i].y+S.coils[j].y)/2,k:'COIL-COIL'});}}
+ const pass=spacing+shorts+coilClr===0;
+ document.getElementById('drc-out').innerHTML=
+  `<div class="${pass?'text-emerald-400':'text-red-400'} font-bold">${pass?'✓ DRC CLEAN':'✗ DRC: '+S.viol.length+' violations'}</div>`+
+  `<div>· min-spacing (&lt;${S.spacingUm}µm): <span class="text-white">${spacing}</span></div><div>· trace–trace shorts: <span class="text-white">${shorts}</span></div><div>· coil clearance: <span class="text-white">${coilClr}</span></div>`+
+  `<div class="text-slate-500">scale: ${pxPerMm.toFixed(2)} px/mm (1 px ≈ ${Math.round(1000/pxPerMm)} µm — spacing rules below that are sub-resolution) · spacing rule = ${minDistPx.toFixed(1)} px · checked ${trs.length} traces, ${S.coils.length} coils. Junction-joined traces count as one net. Violations ringed red on canvas.</div>`;
+ const cmp=compareExtractors();
+ document.getElementById('drc-out').innerHTML+=`<div class="pt-1 mt-1 border-t border-aero-700 text-slate-300">EXTRACTOR RECEIPT — greedy v5: ${cmp.grTraces} traces, <span class="text-red-400">${cmp.grShorts} shorts</span> · Zhang–Suen v6: ${cmp.zsTraces} traces, <span class="${cmp.zsShorts===0?'text-emerald-400':'text-red-400'}">${cmp.zsShorts} shorts</span> (junctions are nodes, not shorts)</div>`;
+ log('DRC run: spacing='+spacing+' shorts='+shorts+' coil='+coilClr, pass?'text-emerald-400':'text-red-400');}
+function clearDRC(){S.viol=[];document.getElementById('drc-out').textContent='DRC cleared.';}
+function countShorts(trs){let n=0;
+ for(let i=0;i<trs.length;i++)for(let j=i+1;j<trs.length;j++){const A=trs[i].pts,B=trs[j].pts;
+  const endsA=[A[0],A[A.length-1]],endsB=[B[0],B[B.length-1]];let joined=false;
+  for(const e of endsA)for(const q of B)if(Math.hypot(e.x-q.x,e.y-q.y)<3.5)joined=true;
+  for(const e of endsB)for(const q of A)if(Math.hypot(e.x-q.x,e.y-q.y)<3.5)joined=true;
+  if(joined)continue;
+  let mn=1e9,mp=null,mq=null;
+  for(const a of A)for(const b of B){const d=Math.hypot(a.x-b.x,a.y-b.y);if(d<mn){mn=d;mp=a;mq=b;}}
+  const isEnd=(tr,pt)=>pt===tr.pts[0]||pt===tr.pts[tr.pts.length-1];
+  if(mn<2.5&&!isEnd(trs[i],mp)&&!isEnd(trs[j],mq))n++;}return n;}
+function compareExtractors(){ // run BOTH extractors on clones of the live tiles, count shorts — the v5 vs v6 receipt
+ const mk=fn=>S.tiles.map(t=>{const c={...t,traces:[],nodes:[],ports:t.ports,verts:t.verts};fn(c);return c;});
+ const zs=mk(extractTileZS).flatMap(t=>t.traces), gr=mk(extractTileGreedy).flatMap(t=>t.traces);
+ return {zsTraces:zs.length, zsShorts:countShorts(zs), grTraces:gr.length, grShorts:countShorts(gr)};}
+// ---------- pulse graph ----------
+function buildGraph(){const nodes=[],edges=[];const key=new Map();
+ function nid(x,y){const k=Math.round(x/6)+','+Math.round(y/6);if(key.has(k))return key.get(k);const id=nodes.length;nodes.push({x,y});key.set(k,id);return id;}
+ allTraces().forEach(tr=>{let prev=null;tr.pts.forEach(pt=>{const id=nid(pt.x,pt.y);if(prev!==null&&prev!==id){edges.push([prev,id]);edges.push([id,prev]);}prev=id;});});
+ // inter-tile port jumps: ports at same location link their trace endpoints (already co-located nodes) — add explicit links between port nodes of neighbour tiles
+ S.tiles.forEach(t=>t.ports.forEach(p=>{p._nid=nid(p.x,p.y);}));
+ for(let i=0;i<S.tiles.length;i++)for(let j=i+1;j<S.tiles.length;j++){const a=S.tiles[i],b=S.tiles[j];a.ports.forEach(pa=>b.ports.forEach(pb=>{if(Math.hypot(pa.x-pb.x,pa.y-pb.y)<4){edges.push([pa._nid,pb._nid]);edges.push([pb._nid,pa._nid]);}}));}
+ // mycelial proximity junctions: CNT chains within 26px couple — this is what makes rerouting around a severed node possible
+ for(let i=0;i<nodes.length;i++)for(let j=i+1;j<nodes.length;j++){const d=Math.hypot(nodes[i].x-nodes[j].x,nodes[i].y-nodes[j].y);if(d>4&&d<26)edges.push([i,j],[j,i]);}
+ // edge-port launch pads: every port couples to its nearest trace node within 60px (the printed port pad contacts the mycelial field even when no chain endpoint snapped exactly onto it)
+ S.tiles.forEach(t=>t.ports.forEach(p=>{let bi=-1,bd=t.R;nodes.forEach((n,i)=>{if(i===p._nid)return;const d=Math.hypot(n.x-p.x,n.y-p.y);if(d<bd){bd=d;bi=i;}});if(bi>=0)edges.push([p._nid,bi],[bi,p._nid]);}));
+ const adj=nodes.map(()=>[]);edges.forEach(([a,b])=>{if(a===b)return;const w=Math.hypot(nodes[a].x-nodes[b].x,nodes[a].y-nodes[b].y);adj[a].push([b,w]);});
+ return{nodes,adj};}
+function dijkstra(g,s,e){const n=g.nodes.length,dist=new Array(n).fill(1e18),prev=new Array(n).fill(-1),done=new Array(n).fill(false);dist[s]=0;
+ for(let k=0;k<n;k++){let u=-1,bd=1e18;for(let i=0;i<n;i++)if(!done[i]&&dist[i]<bd){bd=dist[i];u=i;}if(u<0)break;done[u]=true;if(u===e)break;for(const[v,w]of g.adj[u])if(dist[u]+w<dist[v]){dist[v]=dist[u]+w;prev[v]=u;}}
+ if(dist[e]>=1e17)return null;const path=[];let c=e;while(c>=0){path.push(g.nodes[c]);c=prev[c];}return path.reverse();}
+function pickPort(x,y){let best=null,bd=16;S.tiles.forEach(t=>t.ports.forEach((p,pi)=>{const d=Math.hypot(p.x-x,p.y-y);if(d<bd){bd=d;best={t,pi,p};}}));return best;}
+function firePulse(){const[a,b]=S.pulseSel;const g=buildGraph();const path=dijkstra(g,a.p._nid,b.p._nid);
+ const out=document.getElementById('pulse-out');
+ if(!path){out.innerHTML='<span class="text-red-400">✗ NO PATH</span> on extracted graph between those ports. Re-extract skeleton or pick ports on connected traces.';log('Pulse: no path','text-red-400');return;}
+ const mat=MATS[document.getElementById('inp-mat').value];const I=(parseFloat(document.getElementById('inp-i').value)||120)/1000;
+ const pxPerMm=S.R*1.732/50;let lenMm=0;const segs=[];
+ for(let i=1;i<path.length;i++){const d=Math.hypot(path[i].x-path[i-1].x,path[i].y-path[i-1].y)/pxPerMm;lenMm+=d;segs.push(d);}
+ const A=(S.widthUm*1e-6)*(18e-6);const R=mat.rho*(lenMm/1000)/A;const V=I*R;const P=I*I*R*1000;
+ let flipped=0;S.coils.forEach(c=>{let mn=1e9;for(let i=1;i<path.length;i++)mn=Math.min(mn,segDist(c,path[i-1],path[i]));if(mn<26){c.bit=c.bit?0:1;flipped++;}});
+ S.pulse={path,segs,R,V,P,lenMm,mat,I,t:0};S.pulseT=0;
+ out.innerHTML=`<div class="text-emerald-400">✓ PATH ${path.length} nodes · ${lenMm.toFixed(1)} mm</div><div>· R <span class="text-white">${R<1? (R*1000).toFixed(1)+' mΩ':R.toFixed(2)+' Ω'}</span> (${mat.name})</div><div>· V-drop <span class="text-amber-400">${V<1?(V*1000).toFixed(1)+' mV':V.toFixed(2)+' V'}</span> @ ${(I*1000)|0} mA</div><div>· Joule heat <span class="text-white">${P.toFixed(2)} mW</span></div><div>· Fe-MG coils flipped: <span class="text-amber-400">${flipped}</span> (hysteresis write)</div>`;
+ drawVChart();log(`Pulse T${a.t.id}.e${a.pi} → T${b.t.id}.e${b.pi}: ${lenMm.toFixed(1)}mm, ΔV=${(V*1000).toFixed(0)}mV, ${flipped} coils flipped`,'text-cyan-300');}
+function drawVChart(){const c=document.getElementById('vchart'),g=c.getContext('2d');g.clearRect(0,0,c.width,c.height);if(!S.pulse)return;const{segs,R,I}=S.pulse;const tot=segs.reduce((a,b)=>a+b,0)||1;let acc=0;g.strokeStyle='#06b6d4';g.lineWidth=2;g.beginPath();g.moveTo(4,c.height-8);
+ segs.forEach(s=>{acc+=s;const v=1-(I*R)*(acc/tot)/Math.max(I*R,1e-9);g.lineTo(4+(c.width-8)*(acc/tot),8+(c.height-16)*(1-v)*0+ (c.height-16)*(acc/tot)* (I*R>0?1:0)*0 + (c.height-16)*( (I*R)*(acc/tot) / Math.max(I*R,1e-9) ) );});g.stroke();
+ g.fillStyle='#94a3b8';g.font='9px monospace';g.fillText('V(x): linear drop along resistive path — per-segment I²R heating ∝ segment length',4,10);}
+// ---------- sinogram ----------
+function buildSinogram(){const c=document.getElementById('sino'),g=c.getContext('2d');const W=c.width,H=c.height;g.fillStyle='#000';g.fillRect(0,0,W,H);
+ const t=S.tiles[0];const pts=[];t.traces.forEach(tr=>tr.pts.forEach(p=>pts.push([(p.x-t.cx)/t.R,(p.y-t.cy)/t.R])));
+ const bins=180,angles=120;const img=g.createImageData(W,H);
+ for(let ai=0;ai<angles;ai++){const th=ai/angles*Math.PI,co=Math.cos(th),si=Math.sin(th);const proj=new Float32Array(bins);
+  for(const[px,py]of pts){const s=px*co+py*si;const bi=Math.floor((s+1.5)/3*bins);if(bi>=0&&bi<bins)proj[bi]++;}
+  let mx=0;for(const v of proj)mx=Math.max(mx,v);
+  for(let x=0;x<W;x++){const bi=Math.floor(x/W*bins);const v=mx?proj[bi]/mx:0;const y0=Math.floor(ai/angles*H),y1=Math.max(y0+1,Math.floor((ai+1)/angles*H));
+   for(let y=y0;y<y1;y++){const o=(y*W+x)*4;img.data[o]=v*40;img.data[o+1]=v*200;img.data[o+2]=v*230;img.data[o+3]=255;}}}
+ g.putImageData(img,0,0);log('Sinogram recomputed: '+angles+' angles × '+bins+' bins, '+pts.length+' trace samples');}
+// ---------- exports ----------
+function layerCanvas(layer){const S2=1024,oc=document.createElement('canvas');oc.width=S2;oc.height=S2;const g=oc.getContext('2d');const t=S.tiles[0];const sc=(S2*0.44)/t.R;
+ g.fillStyle=layer===3?'#ffffff':'#000';g.fillRect(0,0,S2,S2);g.save();g.translate(S2/2,S2/2);g.scale(sc,sc);g.translate(-t.cx,-t.cy);
+ const drawTr=(w,col)=>{g.strokeStyle=col;g.lineWidth=w;g.lineCap='round';t.traces.forEach(tr=>{g.beginPath();tr.pts.forEach((p,i)=>i?g.lineTo(p.x,p.y):g.moveTo(p.x,p.y));g.stroke();});};
+ if(layer===1){g.strokeStyle='#fff';g.lineWidth=5;g.beginPath();t.verts.forEach((v,i)=>i?g.lineTo(v.x,v.y):g.moveTo(v.x,v.y));g.closePath();g.stroke();drawTr(4.5,'#ffffff');}
+ if(layer===2){drawTr(2.7,'#ffffff');S.coils.filter(c=>Math.hypot(c.x-t.cx,c.y-t.cy)<t.R).forEach(c=>{g.strokeStyle='#fff';g.lineWidth=2.5;g.beginPath();g.arc(c.x,c.y,9,0,7);g.stroke();g.fillStyle='#000';g.beginPath();g.arc(c.x,c.y,3.5,0,7);g.fill();});}
+ if(layer===3){g.fillStyle='#000';drawTr(10,'#000000');S.coils.forEach(c=>{g.beginPath();g.arc(c.x,c.y,13,0,7);g.fill();});}
+ g.restore();return oc;}
+function dl(canvas,name){const a=document.createElement('a');a.download=name;a.href=canvas.toDataURL('image/png');a.click();}
+function exportAllLayers(){dl(layerCanvas(1),'ISM-SCS_L1_CNT_scaffold.png');setTimeout(()=>dl(layerCanvas(2),'ISM-SCS_L2_Cu_FeMG.png'),350);setTimeout(()=>dl(layerCanvas(3),'ISM-SCS_L3_aerogel_channels.png'),700);toast('Exported L1/L2/L3 masks — centre tile, 1024².');log('Exported 3-layer mask stack (PNG ×3)');}
+function exportStackJSON(){const data={schema:'ISM-SCS-CADCAM-v6',ts:new Date().toISOString(),imbuuid:document.getElementById('addr').textContent,acoustic:{freqHz:S.freq,N:S.N,M:S.M},rules:{widthUm:S.widthUm,spacingUm:S.spacingUm},tiles:S.tiles.map(t=>({id:t.id,q:t.q,r:t.r,sides:t.sides,n:t.n,m:t.m,traces:t.traces.length,ports:t.ports.map((p,i)=>({edge:i,x:+p.x.toFixed(1),y:+p.y.toFixed(1)}))})),coils:S.coils.map(c=>({x:+c.x.toFixed(1),y:+c.y.toFixed(1),bit:c.bit||0})),drc:{violations:S.viol},pulse:S.pulse?{lenMm:+S.pulse.lenMm.toFixed(2),R:+S.pulse.R.toFixed(4),Vdrop:+S.pulse.V.toFixed(4),heatMw:+S.pulse.P.toFixed(2)}:null};
+ const a=document.createElement('a');a.download='ISM-SCS_patch_stack.json';a.href='data:application/json;charset=utf-8,'+encodeURIComponent(JSON.stringify(data,null,2));a.click();log('Exported stack JSON');}
+</script>
+<script>
+// ---------- render + interaction ----------
+function setMode(m){S.mode=m;['patch','pulse','sino'].forEach(k=>document.getElementById('tab-'+k).classList.toggle('on',k===m));
+ document.getElementById('sino-wrap').classList.toggle('hidden',m!=='sino');if(m==='sino')buildSinogram();
+ document.getElementById('mode-hint').textContent=m==='patch'?'PATCH: click a nodal vertex in any tile to place / remove an Fe-MG coil. Neighbour tiles run rotated Chladni modes, so port continuity is a real test, not a copy.':m==='pulse'?'PULSE: click two edge ports (green dots). Dijkstra routes the pulse on the extracted graph; coils near the path flip.':'SINOGRAM: Radon projection of the centre-tile trace field — the CAL input. Export the 3-layer stack from the header.';}
+function sync(){S.freq=+document.getElementById('inp-freq').value;S.N=+document.getElementById('inp-n').value;S.M=+document.getElementById('inp-m').value;S.widthUm=+document.getElementById('inp-w').value;S.spacingUm=+document.getElementById('inp-sp').value;
+ document.getElementById('lbl-freq').textContent=S.freq+' Hz';document.getElementById('lbl-n').textContent=S.N;document.getElementById('lbl-m').textContent=S.M;document.getElementById('lbl-w').textContent=S.widthUm+' µm';document.getElementById('lbl-sp').textContent=S.spacingUm+' µm';buildPatch();scatter();}
+function regen(){buildPatch();log('Skeleton re-extracted: '+allTraces().length+' traces across 7 tiles');}
+cv.addEventListener('click',e=>{const r=cv.getBoundingClientRect(),x=e.clientX-r.left,y=e.clientY-r.top;
+ if(S.mode==='pulse'){const hit=pickPort(x,y);if(!hit){toast('No port within snap range — click a green edge port.');return;}
+   hit.p._nid=null; // force nid assignment in buildGraph via ports loop
+   S.pulseSel.push(hit);document.getElementById('pulse-out').innerHTML=`Ports selected: <span class="text-white">${S.pulseSel.length} / 2</span>`+S.pulseSel.map(s=>`<div>· T${s.t.id} edge ${s.pi} — imbuuid://…/t${s.t.id}/e${s.pi}</div>`).join('');
+   if(S.pulseSel.length===2){ // assign nids first
+     const g=buildGraph();firePulse();S.pulseSel=[];}return;}
+ // patch mode: coil place/remove
+ const ci=S.coils.findIndex(c=>Math.hypot(c.x-x,c.y-y)<14);if(ci>=0){S.coils.splice(ci,1);runHUD();return;}
+ let tx=x,ty=y,md=22,found=false;S.tiles.forEach(t=>t.nodes.forEach(n=>{const d=Math.hypot(n.x-x,n.y-y);if(d<md){md=d;tx=n.x;ty=n.y;found=true;}}));
+ if(found){S.coils.push({x:tx,y:ty,bit:Math.random()<.5?0:1});runHUD();log('Fe-MG coil placed @ '+tx.toFixed(0)+','+ty.toFixed(0));}});
+function render(){ctx.clearRect(0,0,S.W,S.H);ctx.strokeStyle='rgba(28,42,71,.35)';ctx.lineWidth=1;for(let x=0;x<S.W;x+=28){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,S.H);ctx.stroke();}for(let y=0;y<S.H;y+=28){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(S.W,y);ctx.stroke();}
+ stepParticles();
+ if(document.getElementById('chk-part').checked){ctx.fillStyle='#06b6d4';ctx.globalAlpha=.65;for(const p of S.particles)ctx.fillRect(p.x-1,p.y-1,2,2);ctx.globalAlpha=1;}
+ S.tiles.forEach(t=>{ctx.beginPath();t.verts.forEach((v,i)=>i?ctx.lineTo(v.x,v.y):ctx.moveTo(v.x,v.y));ctx.closePath();ctx.fillStyle=t.id===0?'rgba(10,16,31,.55)':'rgba(10,16,31,.3)';ctx.fill();ctx.lineWidth=t.id===0?2.5:1.5;ctx.strokeStyle=t.sides===5?'#f59e0b':'#06b6d4';ctx.stroke();
+  ctx.fillStyle='rgba(148,163,184,.8)';ctx.font='10px JetBrains Mono';ctx.fillText('T'+t.id+' q'+t.q+',r'+t.r+' N'+t.n+'M'+t.m+(t.sides===5?' PENT':''),t.cx-34,t.cy-t.R-6);
+  ctx.strokeStyle='#10b981';ctx.lineWidth=2.2;ctx.shadowColor='#10b981';ctx.shadowBlur=6;t.traces.forEach(tr=>{ctx.beginPath();tr.pts.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));ctx.stroke();});ctx.shadowBlur=0;
+  t.ports.forEach(p=>{ctx.fillStyle='#10b981';ctx.beginPath();ctx.arc(p.x,p.y,S.mode==='pulse'?6:4,0,7);ctx.fill();});});
+ S.coils.forEach(c=>{ctx.strokeStyle='#f59e0b';ctx.fillStyle=c.bit?'rgba(245,158,11,.85)':'rgba(245,158,11,.25)';ctx.lineWidth=2;ctx.shadowColor='#f59e0b';ctx.shadowBlur=8;ctx.beginPath();ctx.arc(c.x,c.y,9,0,7);ctx.fill();ctx.stroke();ctx.shadowBlur=0;ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(c.x,c.y,3,0,7);ctx.fill();ctx.fillStyle='#fbbf24';ctx.font='8px monospace';ctx.fillText(c.bit?'1':'0',c.x-2,c.y-12);});
+ S.viol.forEach(v=>{ctx.strokeStyle='#ef4444';ctx.lineWidth=2;ctx.beginPath();ctx.arc(v.x,v.y,11,0,7);ctx.stroke();ctx.fillStyle='#ef4444';ctx.font='8px monospace';ctx.fillText(v.k,v.x+13,v.y+3);});
+ if(S.pulse){const p=S.pulse;S.pulseT+=0.008;const total=p.path.length-1;const pos=Math.min(total,S.pulseT*total);const i=Math.floor(pos),f=pos-i;
+  ctx.strokeStyle='rgba(249,115,22,.9)';ctx.lineWidth=3.5;ctx.shadowColor='#f97316';ctx.shadowBlur=10;ctx.beginPath();p.path.forEach((pt,k)=>k?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));ctx.stroke();ctx.shadowBlur=0;
+  if(i<total){const a=p.path[i],b=p.path[i+1];ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(a.x+(b.x-a.x)*f,a.y+(b.y-a.y)*f,5,0,7);ctx.fill();}
+  if(S.pulseT>1.3)S.pulseT=0;}
+ requestAnimationFrame(render);}
+window.addEventListener('resize',()=>{buildPatch();});
+window.onload=()=>{buildPatch();scatter();render();log('CAD/CAM v5 booted: 7-tile patch, '+allTraces().length+' traces','text-cyan-300');};
+</script></body></html>

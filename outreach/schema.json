@@ -4,70 +4,187 @@
   "stamp": "SOM-DOC-10914-v1.0.0",
   "description": "The bucket. Every vendor/target enters through this schema; every score is computed from evidence-linked dimension ratings, never assigned directly. Derived from the founder's outreach.py template (TargetCompany / OutreachPackage), hardened: no placeholder contacts, no un-sourced scores.",
   "type": "object",
-  "required": ["targets"],
+  "required": [
+    "targets"
+  ],
   "properties": {
-    "targets": { "type": "array", "items": { "$ref": "#/$defs/TargetCompany" } }
+    "targets": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/TargetCompany"
+      }
+    }
   },
   "$defs": {
     "TargetCompany": {
       "type": "object",
-      "required": ["name", "sector", "capabilities", "contact", "rating", "status"],
+      "required": [
+        "name",
+        "sector",
+        "capabilities",
+        "contact",
+        "rating",
+        "status"
+      ],
       "properties": {
-        "name": { "type": "string" },
-        "sector": { "type": "string", "description": "e.g. 'Amorphous alloys / magnetic cores', 'CAL / volumetric printing', 'CNT & aerogel integration', 'Photopolymer resins', 'Micro-coil / toroid fabrication'" },
-        "capabilities": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+        "name": {
+          "type": "string"
+        },
+        "sector": {
+          "type": "string",
+          "description": "e.g. 'Amorphous alloys / magnetic cores', 'CAL / volumetric printing', 'CNT & aerogel integration', 'Photopolymer resins', 'Micro-coil / toroid fabrication'"
+        },
+        "capabilities": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        },
         "contact": {
           "type": "object",
-          "required": ["email", "email_verified", "source_url"],
+          "required": [
+            "email",
+            "email_verified",
+            "source_url"
+          ],
           "properties": {
-            "email": { "type": "string", "format": "email", "description": "Must be a real, published address. '.example' and any placeholder domain are rejected by the validator." },
-            "email_verified": { "type": "boolean", "description": "True only when the address was read from the company's own site/datasheet, not a directory scrape." },
-            "source_url": { "type": "string", "format": "uri" },
-            "person": { "type": ["string", "null"] }
+            "email": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "email",
+              "description": "Real published address, or null ONLY when status=candidate and the vendor publishes no email (contact form only, source_url required). '.example'/placeholder domains are rejected by the validator."
+            },
+            "email_verified": {
+              "type": "boolean",
+              "description": "True only when the address was read from the company's own site/datasheet, not a directory scrape."
+            },
+            "source_url": {
+              "type": "string",
+              "format": "uri"
+            },
+            "person": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
           }
         },
-        "rating": { "$ref": "#/$defs/FitRating" },
-        "status": { "type": "string", "enum": ["candidate", "captured", "rated", "pitch_drafted", "approved_to_contact", "contacted", "declined", "example_do_not_contact"] },
-        "notes": { "type": "string" }
+        "rating": {
+          "$ref": "#/$defs/FitRating"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "candidate",
+            "captured",
+            "rated",
+            "pitch_drafted",
+            "approved_to_contact",
+            "contacted",
+            "declined",
+            "example_do_not_contact"
+          ]
+        },
+        "notes": {
+          "type": "string"
+        }
       }
     },
     "FitRating": {
       "type": "object",
       "description": "fit_score is COMPUTED: weighted mean of the five dimensions. Each dimension requires an evidence URL. Weights fixed here so scores are comparable across the bucket.",
-      "required": ["dimensions", "fit_score"],
+      "required": [
+        "dimensions",
+        "fit_score"
+      ],
       "properties": {
         "dimensions": {
           "type": "object",
-          "required": ["capability_match", "scale_fit", "materials_access", "evidence_quality", "reachability"],
+          "required": [
+            "capability_match",
+            "scale_fit",
+            "materials_access",
+            "evidence_quality",
+            "reachability"
+          ],
           "properties": {
-            "capability_match": { "$ref": "#/$defs/Dimension", "description": "weight 0.35 — do they actually do the process we need (closed micro-toroids, acoustophoretic alignment, 2D projection litho, pyrolysis...)" },
-            "scale_fit": { "$ref": "#/$defs/Dimension", "description": "weight 0.20 — can they work at our scale (100 um cores, 50 mm tiles, prototype quantities) vs only industrial volume" },
-            "materials_access": { "$ref": "#/$defs/Dimension", "description": "weight 0.20 — do they stock/process the actual alloys & resins (2714A, 2605SA1, CNT photopolymers)" },
-            "evidence_quality": { "$ref": "#/$defs/Dimension", "description": "weight 0.15 — datasheets & published specs vs marketing claims" },
-            "reachability": { "$ref": "#/$defs/Dimension", "description": "weight 0.10 — a named, verified engineering contact vs a web form" }
+            "capability_match": {
+              "$ref": "#/$defs/Dimension",
+              "description": "weight 0.35 \u2014 do they actually do the process we need (closed micro-toroids, acoustophoretic alignment, 2D projection litho, pyrolysis...)"
+            },
+            "scale_fit": {
+              "$ref": "#/$defs/Dimension",
+              "description": "weight 0.20 \u2014 can they work at our scale (100 um cores, 50 mm tiles, prototype quantities) vs only industrial volume"
+            },
+            "materials_access": {
+              "$ref": "#/$defs/Dimension",
+              "description": "weight 0.20 \u2014 do they stock/process the actual alloys & resins (2714A, 2605SA1, CNT photopolymers)"
+            },
+            "evidence_quality": {
+              "$ref": "#/$defs/Dimension",
+              "description": "weight 0.15 \u2014 datasheets & published specs vs marketing claims"
+            },
+            "reachability": {
+              "$ref": "#/$defs/Dimension",
+              "description": "weight 0.10 \u2014 a named, verified engineering contact vs a web form"
+            }
           }
         },
-        "fit_score": { "type": "number", "minimum": 0, "maximum": 10 }
+        "fit_score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 10
+        }
       }
     },
     "Dimension": {
       "type": "object",
-      "required": ["score", "evidence_url"],
+      "required": [
+        "score",
+        "evidence_url"
+      ],
       "properties": {
-        "score": { "type": "number", "minimum": 0, "maximum": 10 },
-        "evidence_url": { "type": "string", "format": "uri" },
-        "note": { "type": "string" }
+        "score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 10
+        },
+        "evidence_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "note": {
+          "type": "string"
+        }
       }
     },
     "OutreachPackage": {
       "type": "object",
-      "description": "Generated per rated target. Draft only — sending requires the founder's tap (standing veto). The patent paragraph from the original template is EXCLUDED from generated packages until counsel-grade review; novelty claims are not outreach copy.",
-      "required": ["company_name", "subject_line", "introduction_pitch", "generated_from_rating"],
+      "description": "Generated per rated target. Draft only \u2014 sending requires the founder's tap (standing veto). The patent paragraph from the original template is EXCLUDED from generated packages until counsel-grade review; novelty claims are not outreach copy.",
+      "required": [
+        "company_name",
+        "subject_line",
+        "introduction_pitch",
+        "generated_from_rating"
+      ],
       "properties": {
-        "company_name": { "type": "string" },
-        "subject_line": { "type": "string" },
-        "introduction_pitch": { "type": "string" },
-        "generated_from_rating": { "type": "boolean", "const": true }
+        "company_name": {
+          "type": "string"
+        },
+        "subject_line": {
+          "type": "string"
+        },
+        "introduction_pitch": {
+          "type": "string"
+        },
+        "generated_from_rating": {
+          "type": "boolean",
+          "const": true
+        }
       }
     }
   }

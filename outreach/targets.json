@@ -1,5 +1,194 @@
 {
   "schema": "ism-scs-vendor-bucket-v1",
   "stamp": "SOM-DOC-10914-v1.0.0",
-  "targets": []
+  "targets": [
+    {
+      "name": "Metglas Inc. (Hitachi Metals)",
+      "sector": "Amorphous alloys / magnetic core materials",
+      "capabilities": [
+        "Fe-based amorphous ribbon (2605SA1)",
+        "Co-based amorphous ribbon (2714A)",
+        "Toroidal core products"
+      ],
+      "contact": {
+        "email": null,
+        "email_verified": false,
+        "source_url": "https://metglas.com/contact-us/",
+        "person": null
+      },
+      "rating": {
+        "dimensions": {
+          "capability_match": {
+            "score": 9,
+            "evidence_url": "https://metglas.com/wp-content/uploads/2021/06/2714A-Magnetic-Alloy-updated.pdf",
+            "note": "They make both candidate core alloys"
+          },
+          "scale_fit": {
+            "score": 5,
+            "evidence_url": "https://metglas.com/magnetic-materials/",
+            "note": "Ribbon/core products are industrial-scale; 100 um closed toroid forming unproven"
+          },
+          "materials_access": {
+            "score": 10,
+            "evidence_url": "https://metglas.com/wp-content/uploads/2021/06/2605SA1-Magnetic-Alloy-Updated.pdf",
+            "note": "2714A + 2605SA1 are their products; datasheets ingested"
+          },
+          "evidence_quality": {
+            "score": 10,
+            "evidence_url": "https://metglas.com/wp-content/uploads/2021/06/2714A-Magnetic-Alloy-updated.pdf",
+            "note": "Full manufacturer datasheets"
+          },
+          "reachability": {
+            "score": 4,
+            "evidence_url": "https://metglas.com/contact-us/",
+            "note": "Quote-request form only; no published engineering email found 2026-11-22"
+          }
+        },
+        "fit_score": 8.05
+      },
+      "status": "rated",
+      "notes": "First fill. Datasheets in engine/knowledge/. Bs/lambda_s ingested; Hc not tabulated (curves only)."
+    },
+    {
+      "name": "VACUUMSCHMELZE (VAC)",
+      "sector": "Amorphous & nanocrystalline cores / soft magnetics",
+      "capabilities": [
+        "Amorphous and nanocrystalline cores",
+        "VITROPERM nanocrystalline material",
+        "Custom inductive components"
+      ],
+      "contact": {
+        "email": "VACSingapore@vacuumschmelze.com",
+        "email_verified": true,
+        "source_url": "https://vacuumschmelze.com/contact",
+        "person": null
+      },
+      "rating": {
+        "dimensions": {
+          "capability_match": {
+            "score": 8,
+            "evidence_url": "https://vacuumschmelze.com/products/inductive-components-and-cores/amorphous-and-nanocrystalline-cores",
+            "note": "Finished cores, not just ribbon"
+          },
+          "scale_fit": {
+            "score": 6,
+            "evidence_url": "https://vacuumschmelze.com/products/inductive-components-and-cores/amorphous-and-nanocrystalline-cores",
+            "note": "Small catalog cores exist; 100 um custom unproven"
+          },
+          "materials_access": {
+            "score": 8,
+            "evidence_url": "https://vacuumschmelze.com/products/soft-magnetic-materials-and-stamped-parts/nanocrystalline-material-vitroperm",
+            "note": "Own alloy family (VITROPERM/VITROVAC), not Metglas grades"
+          },
+          "evidence_quality": {
+            "score": 8,
+            "evidence_url": "https://vacuumschmelze.com/products/soft-magnetic-materials-and-stamped-parts/nanocrystalline-material-vitroperm",
+            "note": "Published material data"
+          },
+          "reachability": {
+            "score": 7,
+            "evidence_url": "https://vacuumschmelze.com/contact",
+            "note": "Named + regional emails published on own contact page (regional office captured)"
+          }
+        },
+        "fit_score": 7.5
+      },
+      "status": "rated",
+      "notes": "Regional (Singapore) published address captured; HQ engineering contact still to capture."
+    },
+    {
+      "name": "3Dresyns",
+      "sector": "Conductive photopolymer resins (CNT/graphene)",
+      "capabilities": [
+        "MWCNT electrically conductive 3D resins",
+        "Graphene conductive resins",
+        "Custom resin formulation"
+      ],
+      "contact": {
+        "email": "info@3dresyns.com",
+        "email_verified": true,
+        "source_url": "https://www.3dresyns.com/pages/contact-us",
+        "person": null
+      },
+      "rating": {
+        "dimensions": {
+          "capability_match": {
+            "score": 7,
+            "evidence_url": "https://www.3dresyns.com/collections/3d-resins-for-electronics",
+            "note": "Real CNT conductive resin product line"
+          },
+          "scale_fit": {
+            "score": 8,
+            "evidence_url": "https://www.3dresyns.com/collections/3d-resins-for-electronics",
+            "note": "Bottle-scale, prototype-friendly"
+          },
+          "materials_access": {
+            "score": 7,
+            "evidence_url": "https://www.3dresyns.com/products/3dresyn-grapnsek1-mwcnt-bio-biocompatible-multi-wall-carbon-nanotubes-based-electrically-conductive-non-soluble-3d-resin",
+            "note": "MWCNT resins in catalog; mu_ext at 405 nm not published \u2014 ingest queue item"
+          },
+          "evidence_quality": {
+            "score": 6,
+            "evidence_url": "https://www.3dresyns.com/pages/instructions-for-use-ifu-for-conductive-resin-systems",
+            "note": "Product pages + IFU; few hard optical/electrical datasheets"
+          },
+          "reachability": {
+            "score": 8,
+            "evidence_url": "https://www.3dresyns.com/pages/contact-us",
+            "note": "Published info@ on own contact page"
+          }
+        },
+        "fit_score": 7.15
+      },
+      "status": "rated",
+      "notes": "Resin pillar candidate. Key unknown: extinction coefficient of CNT-loaded resin at 405 nm."
+    },
+    {
+      "name": "MK Magnetics",
+      "sector": "Tape-wound magnetic cores (custom)",
+      "capabilities": [
+        "Custom tape-wound cores",
+        "Amorphous/nanocrystalline strip winding",
+        "Prototype quantities"
+      ],
+      "contact": {
+        "email": null,
+        "email_verified": false,
+        "source_url": "https://www.mkmagnetics.com/",
+        "person": null
+      },
+      "rating": {
+        "dimensions": {
+          "capability_match": {
+            "score": 7,
+            "evidence_url": "https://www.mkmagnetics.com/",
+            "note": "Tape-wound core specialist \u2014 the closed-toroid fabrication route"
+          },
+          "scale_fit": {
+            "score": 6,
+            "evidence_url": "https://www.mkmagnetics.com/",
+            "note": "Custom work claimed; 100 um scale unproven"
+          },
+          "materials_access": {
+            "score": 6,
+            "evidence_url": "https://www.mkmagnetics.com/",
+            "note": "Winds customer/standard strip alloys"
+          },
+          "evidence_quality": {
+            "score": 5,
+            "evidence_url": "https://www.mkmagnetics.com/",
+            "note": "Capability claims, thin published data"
+          },
+          "reachability": {
+            "score": 3,
+            "evidence_url": "https://www.mkmagnetics.com/",
+            "note": "Contact not yet captured"
+          }
+        },
+        "fit_score": 5.9
+      },
+      "status": "candidate",
+      "notes": "Fabrication-route candidate for closed micro-toroids; contact capture queued."
+    }
+  ]
 }

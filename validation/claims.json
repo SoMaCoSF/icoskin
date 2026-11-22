@@ -1,0 +1,14 @@
+{
+  "schema": "ism-scs-wolfram-harness-v1",
+  "stamp": "SOM-DOC-10915-v1.0.0",
+  "note": "Every load-bearing number in the ISM-SCS model, checked against WolframAlpha (independent arithmetic). Wolfram runs were executed via wolframalpha.com on 2026-11-22; results recorded verbatim. Re-run: python3 run_harness.py prints the Wolfram URL per claim; a PASS requires |ours - wolfram| within tolerance.",
+  "claims": [
+    {"id": "R-TRACE-75MM", "claim": "Resistance of the 75 mm Cu trace (45 x 18 um cross-section)", "ours": 1.56, "unit": "ohm", "source_ours": "CAD/CAM pulse simulator (rho*L/A), measured live", "wolfram_query": "(1.68e-8 ohm meters * 0.075 meters) / (45e-6 meters * 18e-6 meters)", "wolfram_result": 1.56, "tolerance": 0.02, "verdict": "PASS"},
+    {"id": "H-3TURN", "claim": "Field from 3 turns at 120 mA over a 0.3 mm path", "ours": 1200, "unit": "A/m", "source_ours": "Ampere's law NI/l", "wolfram_query": "3*0.12 amperes / 0.0003 meters", "wolfram_result": 1200, "tolerance": 1, "verdict": "PASS"},
+    {"id": "B-LINEAR-UPPER", "claim": "Linear-mu flux density mu0 * 45000 * 1200 (upper bound; core saturates at Bs long before)", "ours": 67.9, "unit": "T", "source_ours": "Direct product; interpretation: saturation-bound, mu_r irrelevant at drive", "wolfram_query": "4*pi*10^-7 * 45000 * 1200", "wolfram_result": 67.8584, "tolerance": 0.1, "verdict": "PASS"},
+    {"id": "CONTRAST-DENSITY-TERM", "claim": "Density contrast expression (5*rho_p - 2*rho_f)/(2*rho_p + rho_f) for Fe-MG (7800) in resin (1100)", "ours": 2.20, "unit": "dimensionless", "source_ours": "Gor'kov dipole-side term; full contrast Phi = 0.723 per Argon review (f1/f2 form)", "wolfram_query": "(5*7800 - 2*1100) / (2*7800 + 1100)", "wolfram_result": 2.20359, "tolerance": 0.01, "verdict": "PASS"},
+    {"id": "H-1TURN-TOROID", "claim": "Argon: single-turn field at a closed 100 um toroid, 120 mA (H = I / (pi * D))", "ours": 382, "unit": "A/m", "source_ours": "Argon review Q2 — the number that kills the 120 mA drive point (8.7x Hc)", "wolfram_query": "0.12 amperes / (pi * 0.0001 meters)", "wolfram_result": 382, "tolerance": 1, "verdict": "PASS"},
+    {"id": "I-DRIVE-060HC", "claim": "Argon: drive current for one input at 0.60 * Hc (44 A/m) on that toroid", "ours": 8.29, "unit": "mA", "source_ours": "Argon review Q2 — the corrected drive point now printed in the testbench", "wolfram_query": "0.6 * 44 * pi * 0.0001", "wolfram_result": 8.2938, "tolerance": 0.05, "verdict": "PASS"},
+    {"id": "FLUX-LOSS-RATIO", "claim": "Argon: resistive flux loss over a 10 mm interconnect vs one core's flux reservoir", "ours": 7.5, "unit": "x", "source_ours": "Argon review Q3 — the fan-out killer (0.43 ohm * 1.39e-8 C / 8e-10 Wb)", "wolfram_query": "(0.43 * 1.39e-8) / (8e-10)", "wolfram_result": 7.47125, "tolerance": 0.1, "verdict": "PASS"}
+  ]
+}

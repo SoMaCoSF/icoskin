@@ -1,6 +1,7 @@
 import Simulator from './Simulator';
 import Chladni from './Chladni';
 import { counts } from '../lib/ico';
+import Tabs from './Tabs';
 
 function TopoTable() {
   const rows = [0, 1, 2, 3, 4].map((n) => ({ n, ...counts(n) }));
@@ -60,6 +61,7 @@ export default function Home() {
           <a href="/cad-cam" style={{ color: 'var(--fg)', fontWeight: 600, textDecoration: 'none' }}>CAD/CAM ENGINE →</a>
         </div>
       </header>
+      <Tabs active="brief" />
 
       <div className="hero">
         <h1>THE SKIN IS THE<br />ADDRESS SPACE</h1>
