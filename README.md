@@ -60,6 +60,21 @@ Deploy is git-linked: commit + push to `main`, then `deploy.py` creates the prod
 
 5. **Testbench Mode — Magnetic Core Logic (v7)** — waveform generators at edge ports (editable bit patterns), packets on graph edges with delay τ = L/v_wave, a designated Fe-MG coil as gate core: flux sums at 0.60·Φc per active input against gate thresholds (AND ≥ 1.0·Φc, OR ≥ 0.5, XOR window [0.5, 1.1), NOT vs bias winding). Hysteresis state renders blue (0) / red (1); oscilloscope lanes A / B / Φ / OUT; measured truth table verified against expected per tick. Verified by exercise: AND on A=01101, B=00111 → Φ = 0, 0.6, 1.2, 0.6, 1.2 → OUT 0,0,1,0,1 (5/5); XOR 5/5. Bounds: discrete-event, single gate, resistive-era timing — multi-gate composition (fan-out, cascaded cores, clock skew across the patch) is the next iteration, as is inductive coupling between cores.
 
+## Prior art — the four pillars (founder-supplied framing, 2026-11-22)
+
+No commercial product combines these into a hull; each pillar stands on its own literature:
+
+1. **Acoustic particle alignment & acoustophoretic patterning** — Gor'kov-potential herding of micro/nano-particles in standing waves. Precedent: acoustophoretic printing (Jennifer Lewis lab, Harvard); SAW/BAW alignment of multi-walled CNTs along nodal lines in liquid prepolymers.
+2. **Volumetric printing / Computed Axial Lithography (CAL)** — UC Berkeley / LLNL (Shusteff, Taylor et al.): tomographic sinograms + rotational dose accumulation. *Argon-review bound: on 50 mm particle-loaded tiles CAL fails on opacity and Rayleigh range; the credible route for this skin is top-down 2D projection lithography of the same masks — see `reviews/argon-corelogic-review.md`.*
+3. **Magnetic core memory & woven core-rope** — Apollo Guidance Computer core-rope memory (MIT Instrumentation Lab / Raytheon): woven wires through transformer cores, non-volatile, radiation-tolerant. Modern parallels in woven/textile memory research.
+4. **Printable conductive resins & pyrolyzed carbon scaffolds** — SWCNT/MWCNT/graphene-doped photopolymers (e.g. 3Dresyns lines) as the starting formulations that hold the acoustic/optical pattern before pyrolysis or metal infiltration.
+
+Citation posture in docs: pattern generation → acoustophoretic concentration + SAW nanotube alignment literature; printing physics → CAL papers (with the bound above); compute architecture → AGC core-rope archives.
+
+## Independent physics review (Argon, 2026-11-22)
+
+The core-logic model was fed to an independent reviewer (Argon via arena.ai; questions in the founder's files, full answer at `reviews/argon-corelogic-review.md`, SOM-DOC-10913). Verdicts: XOR single-core window **FICTION** (→ two-core INHIBIT pair, now implemented in the testbench); passive fan-out **FICTION** (flux budget: interconnect loss ≈ 7.5× core reservoir → 2-phase clocked core-diode architecture); unclocked coincidence **FICTION** (switching latency 50–200 ns/hop dominates τ = L/v → two-phase synchronous clocking); single-frequency CNT/Fe-MG separation **FICTION** (both Φ > 0; vertices are potential maxima — Fe-MG needs magnetic template pinning); CAL on 50 mm loaded tiles **MARGINAL→2D projection**; in-transit evaluation **MARGINAL** (Villari strain comparators + time-of-flight path integration are real; header routing at 1-core junctions is not); radiation hardness of the stored state **SOUND** (polymer matrix fails first: ESD scrambling ~10–100 kRad, Villari lockup ~0.5–5 MRad). Threshold margins **MARGINAL**: closed toroids only (open beads demagnetise), r_out/r_in ≤ 1.35, drive ≈ 8.3 mA per input at 100 µm scale — not 120 mA. WolframAlpha spot-checks concurred with the arithmetic it was given (R = 1.56 Ω; H = 1200 A/m at 3 turns/0.3 mm; linear-μ B = 67.9 T ≫ B_sat, i.e. saturation-bound).
+
 ## Production stack (target architecture, founder-supplied 2026-11-22)
 
 Three tiers, matching the VAMToolbox/Tomo pattern for volumetric printing software:
@@ -69,6 +84,8 @@ Three tiers, matching the VAMToolbox/Tomo pattern for volumetric printing softwa
 3. **Computational & manufacturing backend** — Python + FastAPI (VAMToolbox-class sinograms, Gor'kov solvers, Shapely/Clipper2 DRC) + ngspice for Jiles–Atherton core hysteresis on extracted netlists. *Status: reference implementation in `engine/`, exercised and graded — see `engine/README.md` (SOM-DOC-10912). Headline: as shipped, its field transform produced **0 core nodes** (level-set bug); with the patch layer in `engine/ism_scs_field_fix.py`, the default tile compiles to **24 Fe-MG core nodes** and a 512×180 CAL sinogram in ~2 s.*
 
 ## Iteration log
+
+- **2026-11-22 · v8 honest physics + v7.1 layout repair** — Argon review folded in: testbench XOR rebuilt as the two-core INHIBIT pair, drive-point field arithmetic (Hc = 44 A/m, ≈8.3 mA/input at 100 µm toroid, closed-core + r_out/r_in ≤ 1.35 requirements) printed in the instrument; §11 carries the corrections at equal prominence. Layout: the stacked-column failure root-caused to an `!important` grid rule from the v5 fallback defeating all media queries — removed; single ID-keyed layout authority, collapsible side panels, deterministic canvas height, rebuild-on-resize. Verified at 1600 / 820 / 480 px widths in the headless rig.
 
 - **2026-11-22 · Tier-3 Python engine exercised + field fix** — Gemini-supplied `ism_scs_engine.py` landed in `engine/` byte-exact, run before integration: field/skeleton/sinogram pipeline real, but the shipped field transform yields 0 core nodes at all thresholds (root-caused to the second cos() moving the nodal set onto a level set). Patch layer restores true nodal lines → 24 core nodes measured. SPICE netlist graded SCHEMATIC (linear chain, not graph edges). Full grading table in `engine/README.md`.
 - **2026-11-22 · v7 testbench** — Magnetic Core Logic testbench per the founder's spec: port waveform generators, τ = L/v packet delay, flux-summation gate evaluation (AND/OR/XOR/NOT) at a designated Fe-MG coil, blue/red hysteresis rendering, oscilloscope + verified truth table (AND 5/5, XOR 5/5, driven programmatically in headless Chrome, zero page errors).

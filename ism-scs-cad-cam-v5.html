@@ -1,17 +1,14 @@
 <!DOCTYPE html>
 <!-- SOM-DOC-10910-v1.0.0 ISM-SCS CAD/CAM Engine v5 — Patch Editor, Skeleton/DRC, Sinogram, Pulse Sim -->
 <html lang="en" class="dark"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ISM-SCS CAD/CAM Engine v7 — GeoHex Patch · DRC · CAL Sinogram · Core-Memory Pulse</title>
+<title>ISM-SCS CAD/CAM Engine v8 — GeoHex Patch · DRC · CAL Sinogram · Core-Memory Pulse</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <script>if(window.tailwind)tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans-serif'],mono:['JetBrains Mono','monospace']},colors:{aero:{950:'#040812',900:'#0a101f',800:'#111a2e',700:'#1c2a47',cyan:'#06b6d4',amber:'#f59e0b',emerald:'#10b981'}}}}};</script>
 <style>body{background:#040812;color:#e2e8f0}canvas{touch-action:none}.panel{border:1px solid rgba(6,182,212,.25);box-shadow:0 4px 24px rgba(0,0,0,.6)}input[type=range]{-webkit-appearance:none;background:#1c2a47;height:6px;border-radius:4px;width:100%}input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:#06b6d4;cursor:pointer;box-shadow:0 0 8px rgba(6,182,212,.8)}::-webkit-scrollbar{width:5px;height:5px}::-webkit-scrollbar-thumb{background:#1c2a47;border-radius:3px}.btn{padding:.45rem .7rem;border-radius:.5rem;font-size:11px;font-weight:600;transition:.15s}.tabbtn{padding:.4rem .6rem;border-radius:.5rem;font-size:11px;font-family:JetBrains Mono,monospace;border:1px solid #1c2a47;background:#111a2e;color:#94a3b8;cursor:pointer}.tabbtn.on{background:rgba(6,182,212,.18);border-color:#06b6d4;color:#a5f3fc}
 /* Fallback layout if Tailwind CDN is unreachable (offline / headless rigs) */
 header{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;background:rgba(10,16,31,.92);border-bottom:1px solid #1c2a47;padding:10px 16px;position:sticky;top:0;z-index:40}
-main{display:grid;grid-template-columns:300px minmax(0,1fr) 320px !important;gap:16px;padding:16px;max-width:1920px;margin:0 auto;width:100%;box-sizing:border-box}
-main>aside:first-of-type{grid-column:1}main>section{grid-column:2;min-width:0}main>aside:last-of-type{grid-column:3}
-@media(max-width:1100px){main>aside:first-of-type,main>section,main>aside:last-of-type{grid-column:1}}
-@media(max-width:1100px){main{grid-template-columns:1fr}}
+main{display:grid;gap:16px;padding:16px;max-width:1920px;margin:0 auto;width:100%;box-sizing:border-box}
 aside,section{display:flex;flex-direction:column;gap:16px;min-width:0}
 .bg-aero-900{background:#0a101f}.bg-aero-950{background:#040812}.bg-aero-800{background:#111a2e}
 .rounded-xl{border-radius:12px}.rounded-lg{border-radius:8px}.p-4{padding:16px}.p-3{padding:12px}.p-2\.5{padding:10px}
@@ -23,16 +20,28 @@ body{margin:0}.flex{display:flex}.flex-col{flex-direction:column}.grid{display:g
 .font-mono{font-family:'JetBrains Mono',monospace}.font-bold{font-weight:700}.font-semibold{font-weight:600}.uppercase{text-transform:uppercase}.tracking-wider{letter-spacing:.05em}
 .border-b{border-bottom:1px solid #1c2a47}.border{border:1px solid #1c2a47}.border-aero-700{border-color:#1c2a47}.pb-2{padding-bottom:8px}.pt-1{padding-top:4px}.pt-2{padding-top:8px}.pt-3{padding-top:12px}.hidden{display:none}
 canvas#cv{width:100%;height:100%;min-height:480px;display:block}select,input[type=number]{box-sizing:border-box}
-h1{font-size:16px;margin:0}h2{font-size:12px;margin:0}p{margin:0}</style></head>
+h1{font-size:16px;margin:0}h2{font-size:12px;margin:0}p{margin:0}
+/* v7.1 layout repair: explicit columns keyed on IDs - holds without the Tailwind CDN */
+main#layout{display:grid;grid-template-columns:300px minmax(0,1fr) 330px;gap:16px}
+main#layout.hide-left{grid-template-columns:minmax(0,1fr) 330px}
+main#layout.hide-right{grid-template-columns:300px minmax(0,1fr)}
+main#layout.hide-left.hide-right{grid-template-columns:minmax(0,1fr)}
+main#layout.hide-left #col-left,main#layout.hide-right #col-right{display:none}
+main#layout>#col-left,main#layout>#col-center,main#layout>#col-right{grid-column:auto}
+@media(max-width:1180px){main#layout{grid-template-columns:262px minmax(0,1fr)}main#layout>#col-right{grid-column:1/-1}}
+@media(max-width:760px){main#layout{grid-template-columns:minmax(0,1fr)}}
+canvas#cv{height:min(74vh,880px);min-height:420px}
+.panelflip{font-size:10px;background:#0a1122;border:1px solid #1c2a47;color:#94a3b8;border-radius:6px;padding:4px 8px;font-family:inherit;cursor:pointer}
+</style></head>
 <body class="min-h-screen flex flex-col">
 <header class="bg-aero-900/90 border-b border-aero-700 px-4 py-2.5 flex flex-wrap items-center justify-between gap-2 sticky top-0 z-40">
-<div><div class="flex items-center gap-2"><h1 class="font-bold text-sm sm:text-base text-white tracking-wide">ISM-SCS CAD/CAM ENGINE <span class="text-cyan-400">v7</span></h1><span class="px-2 py-0.5 text-[10px] font-mono bg-amber-500/10 text-amber-400 border border-amber-500/30 rounded">PATCH · DRC · CAL · PULSE</span></div>
+<div><div class="flex items-center gap-2"><h1 class="font-bold text-sm sm:text-base text-white tracking-wide">ISM-SCS CAD/CAM ENGINE <span class="text-cyan-400">v8</span></h1><span class="px-2 py-0.5 text-[10px] font-mono bg-amber-500/10 text-amber-400 border border-amber-500/30 rounded">PATCH · DRC · CAL · PULSE</span></div>
 <p class="text-[11px] text-slate-400 font-mono">Multi-Tile GeoHex Patch Editor • Medial-Axis Skeleton + DRC • Tomographic Sinogram • Transient Core-Memory Pulse</p></div>
-<div class="flex gap-2"><a href="/" class="btn bg-aero-800 hover:bg-aero-700 text-slate-200 border border-aero-700" style="text-decoration:none;display:inline-flex;align-items:center">← ICOSKIN BRIEF</a><button onclick="exportStackJSON()" class="btn bg-aero-800 hover:bg-aero-700 text-cyan-300 border border-cyan-500/40">Export Stack JSON</button><button onclick="exportAllLayers()" class="btn bg-cyan-600 hover:bg-cyan-500 text-white shadow-lg shadow-cyan-600/20">Export 3-Layer Masks (PNG)</button></div></header>
+<div class="flex gap-2"><button class="panelflip" onclick="document.getElementById('layout').classList.toggle('hide-left')">Left panels</button><button class="panelflip" onclick="document.getElementById('layout').classList.toggle('hide-right')">Right panels</button><a href="/" class="btn bg-aero-800 hover:bg-aero-700 text-slate-200 border border-aero-700" style="text-decoration:none;display:inline-flex;align-items:center">← ICOSKIN BRIEF</a><button onclick="exportStackJSON()" class="btn bg-aero-800 hover:bg-aero-700 text-cyan-300 border border-cyan-500/40">Export Stack JSON</button><button onclick="exportAllLayers()" class="btn bg-cyan-600 hover:bg-cyan-500 text-white shadow-lg shadow-cyan-600/20">Export 3-Layer Masks (PNG)</button></div></header>
 
-<main class="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-4 p-4 max-w-[1920px] w-full mx-auto">
+<main id="layout" class="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-4 p-4 max-w-[1920px] w-full mx-auto">
 <!-- LEFT -->
-<aside class="lg:col-span-3 flex flex-col gap-4">
+<aside class="lg:col-span-3 flex flex-col gap-4" id="col-left">
 <div class="bg-aero-900 rounded-xl p-4 panel space-y-3">
 <h2 class="text-xs font-bold uppercase tracking-wider text-cyan-400 border-b border-aero-700 pb-2">1 · Chladni Source (Centre Tile)</h2>
 <div class="space-y-1"><div class="flex justify-between text-xs"><span class="text-slate-400">Frequency</span><span id="lbl-freq" class="font-mono text-cyan-400 font-semibold">640 Hz</span></div><input type="range" id="inp-freq" min="120" max="2400" step="10" value="640" oninput="sync()"></div>
@@ -68,7 +77,7 @@ h1{font-size:16px;margin:0}h2{font-size:12px;margin:0}p{margin:0}</style></head>
 </aside>
 
 <!-- CENTER -->
-<section class="lg:col-span-6 bg-aero-900 rounded-xl p-3 panel flex flex-col min-h-[520px]">
+<section id="col-center" class="lg:col-span-6 bg-aero-900 rounded-xl p-3 panel flex flex-col min-h-[520px]">
 <div class="flex flex-wrap items-center justify-between gap-2 pb-2 px-1">
 <div class="flex gap-1.5"><button class="tabbtn on" id="tab-patch" onclick="setMode('patch')">PATCH EDITOR</button><button class="tabbtn" id="tab-pulse" onclick="setMode('pulse')">PULSE SIM</button><button class="tabbtn" id="tab-sino" onclick="setMode('sino')">SINOGRAM / CAL</button><button class="tabbtn" id="tab-testbench" onclick="setMode('testbench')">TESTBENCH</button></div>
 <div class="font-mono text-[11px] flex gap-2"><span class="px-2 py-0.5 rounded bg-aero-950 border border-aero-700 text-cyan-400">TILES <strong id="hud-tiles" class="text-white">7</strong></span><span class="px-2 py-0.5 rounded bg-aero-950 border border-aero-700 text-emerald-400">TRACES <strong id="hud-traces" class="text-white">0</strong></span><span class="px-2 py-0.5 rounded bg-aero-950 border border-aero-700 text-amber-400">COILS <strong id="hud-coils" class="text-white">0</strong></span></div></div>
@@ -86,14 +95,14 @@ h1{font-size:16px;margin:0}h2{font-size:12px;margin:0}p{margin:0}</style></head>
 <button onclick="tbStep()" class="btn bg-aero-800 border border-aero-700 text-slate-200">Step tick</button>
 <button onclick="tbReset()" class="btn bg-aero-800 border border-aero-700 text-slate-200">Reset</button>
 </div>
-<div id="tb-status" class="font-mono text-[11px] text-slate-400 pb-2">Click ports in order: 1st = Input A · 2nd = Input B · 3rd = Output. Click a coil to make it the gate core (or Auto-place). Φ per active input = 0.60·Φc. AND fires at Φ ≥ 1.0·Φc (both inputs), OR at ≥ 0.5, XOR in the window [0.5, 1.1), NOT inverts A against its bias winding.</div>
+<div id="tb-status" class="font-mono text-[11px] text-slate-400 pb-2">Click ports in order: 1st = Input A · 2nd = Input B · 3rd = Output. Click a coil to make it the gate core (or Auto-place). Φ per active input = 0.60·Φc. AND fires at Φ ≥ 1.0·Φc (both inputs), OR at ≥ 0.5, NOT inverts A against its bias winding. XOR is a TWO-CORE INHIBIT pair (single-core flux-window XOR struck as fiction, Argon review 2026-11-22). Field check: closed 100 µm toroid, N=1 — 0.60·Hc (Hc = 44 A/m) needs ≈ 8.3 mA per input; the 120 mA pulse-sim drive would put a single input at 382 A/m ≈ 8.7× Hc. Cores must be CLOSED toroids (open beads demagnetise, N_d ≈ 1/3) with r_out/r_in ≤ 1.35 for a ±15% margin.</div>
 <canvas id="scope" width="720" height="118" class="w-full rounded border border-aero-700 bg-black"></canvas>
 <div id="tb-table" class="font-mono text-[11px] text-slate-400 pt-2 space-y-0.5"></div>
 </div>
 </section>
 
 <!-- RIGHT -->
-<aside class="lg:col-span-3 flex flex-col gap-4">
+<aside class="lg:col-span-3 flex flex-col gap-4" id="col-right">
 <div class="bg-aero-900 rounded-xl p-4 panel space-y-3">
 <h2 class="text-xs font-bold uppercase tracking-wider text-cyan-400 border-b border-aero-700 pb-2">4 · Transient Pulse Simulator</h2>
 <p class="text-[11px] text-slate-400">In PULSE mode, click two edge ports. The pulse routes on the extracted mycelial graph (Dijkstra over trace segments, inter-tile port jumps allowed), with per-segment V-drop and Joule heating.</p>
@@ -371,7 +380,11 @@ function render(){ctx.clearRect(0,0,S.W,S.H);ctx.strokeStyle='rgba(28,42,71,.35)
   if(S.pulseT>1.3)S.pulseT=0;}
  if(window.tbFrame)tbFrame(performance.now());requestAnimationFrame(render);}
 window.addEventListener('resize',()=>{buildPatch();});
-window.onload=()=>{buildPatch();scatter();render();log('CAD/CAM v5 booted: 7-tile patch, '+allTraces().length+' traces','text-cyan-300');};
+window.onload=()=>{buildPatch();scatter();render();log('CAD/CAM booted: 7-tile patch, '+allTraces().length+' traces','text-cyan-300');
+ setTimeout(()=>{if(!S.tiles.length){buildPatch();scatter();}},450);};
+let _rzT=null,_lastPW=0;
+window.addEventListener('resize',()=>{clearTimeout(_rzT);_rzT=setTimeout(()=>{const w=cv.parentElement.getBoundingClientRect().width;
+ if(w&&Math.abs(w-_lastPW)>30){_lastPW=w;buildPatch();scatter();}},220);});
 </script>
 <script>
 // ================= TESTBENCH — MAGNETIC CORE LOGIC (v7) =================
@@ -429,15 +442,18 @@ function tbTick(){
   const a=+(patA[TB.tick%patA.length]), b=TB.gateType==='NOT'?0:+(patB[TB.tick%patB.length]);
   if(a)tbSpawn(TB.paths.A,'#22d3ee'); if(b&&TB.paths.B)tbSpawn(TB.paths.B,'#a78bfa');
   const flux=TB.gateType==='NOT'?a*PHI_IN:(a+b)*PHI_IN;
-  let out,exp;
+  let out,exp,fluxShown=flux;
   if(TB.gateType==='AND'){out=flux>=1.0?1:0;exp=a&b;}
   else if(TB.gateType==='OR'){out=flux>=0.5?1:0;exp=a|b;}
-  else if(TB.gateType==='XOR'){out=(flux>=0.5&&flux<1.1)?1:0;exp=a^b;}
+  else if(TB.gateType==='XOR'){ // HONEST XOR (Argon review): two INHIBIT cores, (A and-not B) or (B and-not A).
+    const c1=(a*PHI_IN-b*PHI_IN)>=0.5?1:0, c2=(b*PHI_IN-a*PHI_IN)>=0.5?1:0; // differential windings +A,-B / -A,+B vs half-select threshold
+    out=c1|c2; exp=a^b; fluxShown=Math.abs(a-b)*PHI_IN;
+    if(a!==b)log('Testbench tick '+TB.tick+': XOR core '+(c1?'1 (A,not B)':'2 (B,not A)')+' flipped — two-core INHIBIT pair','text-purple-300');}
   else {out=a?0:1;exp=a?0:1;} // NOT: bias winding holds core at 1; A pulse opposes it
   const flipped=TB.gate.bit!==out;TB.gate.bit=out;
   if(out)setTimeout(()=>tbSpawn(TB.paths.O,'#34d399'),350);
-  TB.hist.push({tick:TB.tick,a,b,flux:+flux.toFixed(2),out,exp,flipped});
-  if(flipped)log('Testbench tick '+TB.tick+': gate core FLIPPED → '+out+' (Phi='+flux.toFixed(2)+' Phi_c, '+TB.gateType+')','text-amber-300');
+  TB.hist.push({tick:TB.tick,a,b,flux:+fluxShown.toFixed(2),out,exp,flipped});
+  if(flipped)log('Testbench tick '+TB.tick+': gate core FLIPPED → '+out+' (Phi='+fluxShown.toFixed(2)+' Phi_c, '+TB.gateType+')','text-amber-300');
   TB.tick++;drawScope();tbTable();tbStatus();
 }
 function tbVerdict(){const ok=TB.hist.filter(h=>h.out===h.exp).length;
