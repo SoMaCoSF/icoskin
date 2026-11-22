@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!-- SOM-DOC-10910-v1.0.0 ISM-SCS CAD/CAM Engine v5 — Patch Editor, Skeleton/DRC, Sinogram, Pulse Sim -->
 <html lang="en" class="dark"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ISM-SCS CAD/CAM Engine v5 — GeoHex Patch · DRC · CAL Sinogram · Core-Memory Pulse</title>
+<title>ISM-SCS CAD/CAM Engine v6 — GeoHex Patch · DRC · CAL Sinogram · Core-Memory Pulse</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <script>if(window.tailwind)tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans-serif'],mono:['JetBrains Mono','monospace']},colors:{aero:{950:'#040812',900:'#0a101f',800:'#111a2e',700:'#1c2a47',cyan:'#06b6d4',amber:'#f59e0b',emerald:'#10b981'}}}}};</script>
@@ -26,7 +26,7 @@ canvas#cv{width:100%;height:100%;min-height:480px;display:block}select,input[typ
 h1{font-size:16px;margin:0}h2{font-size:12px;margin:0}p{margin:0}</style></head>
 <body class="min-h-screen flex flex-col">
 <header class="bg-aero-900/90 border-b border-aero-700 px-4 py-2.5 flex flex-wrap items-center justify-between gap-2 sticky top-0 z-40">
-<div><div class="flex items-center gap-2"><h1 class="font-bold text-sm sm:text-base text-white tracking-wide">ISM-SCS CAD/CAM ENGINE <span class="text-cyan-400">v5</span></h1><span class="px-2 py-0.5 text-[10px] font-mono bg-amber-500/10 text-amber-400 border border-amber-500/30 rounded">PATCH · DRC · CAL · PULSE</span></div>
+<div><div class="flex items-center gap-2"><h1 class="font-bold text-sm sm:text-base text-white tracking-wide">ISM-SCS CAD/CAM ENGINE <span class="text-cyan-400">v6</span></h1><span class="px-2 py-0.5 text-[10px] font-mono bg-amber-500/10 text-amber-400 border border-amber-500/30 rounded">PATCH · DRC · CAL · PULSE</span></div>
 <p class="text-[11px] text-slate-400 font-mono">Multi-Tile GeoHex Patch Editor • Medial-Axis Skeleton + DRC • Tomographic Sinogram • Transient Core-Memory Pulse</p></div>
 <div class="flex gap-2"><a href="/" class="btn bg-aero-800 hover:bg-aero-700 text-slate-200 border border-aero-700" style="text-decoration:none;display:inline-flex;align-items:center">← ICOSKIN BRIEF</a><button onclick="exportStackJSON()" class="btn bg-aero-800 hover:bg-aero-700 text-cyan-300 border border-cyan-500/40">Export Stack JSON</button><button onclick="exportAllLayers()" class="btn bg-cyan-600 hover:bg-cyan-500 text-white shadow-lg shadow-cyan-600/20">Export 3-Layer Masks (PNG)</button></div></header>
 
@@ -39,7 +39,16 @@ h1{font-size:16px;margin:0}h2{font-size:12px;margin:0}p{margin:0}</style></head>
 <div class="grid grid-cols-2 gap-3"><div class="space-y-1"><div class="flex justify-between text-xs"><span class="text-slate-400">Mode N</span><span id="lbl-n" class="font-mono text-white font-bold">3</span></div><input type="range" id="inp-n" min="1" max="9" step="1" value="3" oninput="sync()"></div>
 <div class="space-y-1"><div class="flex justify-between text-xs"><span class="text-slate-400">Mode M</span><span id="lbl-m" class="font-mono text-white font-bold">5</span></div><input type="range" id="inp-m" min="1" max="9" step="1" value="5" oninput="sync()"></div></div>
 <div class="space-y-1"><div class="flex justify-between text-xs"><span class="text-slate-400">Trace width</span><span id="lbl-w" class="font-mono text-emerald-400">45 µm</span></div><input type="range" id="inp-w" min="10" max="160" step="5" value="45" oninput="sync()"></div>
-<div class="space-y-1"><div class="flex justify-between text-xs"><span class="text-slate-400">Min spacing rule</span><span id="lbl-sp" class="font-mono text-emerald-400">60 µm</span></div><input type="range" id="inp-sp" min="20" max="200" step="10" value="60" oninput="sync()"></div>
+<div class="space-y-1"><div class="flex justify-between text-xs"><span class="text-slate-400">Min spacing rule</span><span id="lbl-sp" class="font-mono text-emerald-400">800 µm</span></div><input type="range" id="inp-sp" min="100" max="2000" step="50" value="800" oninput="sync()"></div>
+<div class="space-y-1"><div class="flex justify-between text-xs"><span class="text-slate-400">Field source (solver)</span></div>
+<select id="inp-field" class="w-full bg-aero-950 border border-aero-700 rounded px-2 py-1.5 font-mono text-white text-[11px]" onchange="buildPatch();scatter()">
+<option value="chladni" selected>Chladni |Z| — plate standing wave</option>
+<option value="gorkov">Gor'kov proxy — U = f1·p² − f2·|∇Z|² (particle trapping)</option></select>
+<p class="text-[10px] text-slate-500">Any scalar field feeds the same vectorizer — this is the seam where a fluid/field solver (fluid.somacosf.com class) plugs in.</p></div>
+<div class="space-y-1"><div class="flex justify-between text-xs"><span class="text-slate-400">Vectorizer</span></div>
+<select id="inp-vec" class="w-full bg-aero-950 border border-aero-700 rounded px-2 py-1.5 font-mono text-white text-[11px]" onchange="buildPatch()">
+<option value="zs" selected>Zhang–Suen thinning → graph → Douglas–Peucker (v6)</option>
+<option value="greedy">Greedy chaining (v5, comparison baseline)</option></select></div>
 <div class="flex gap-2 pt-1"><button onclick="regen()" class="btn flex-1 bg-emerald-600/20 border border-emerald-500/40 text-emerald-300 hover:bg-emerald-600/30">Re-extract Skeleton</button><button onclick="scatter()" class="btn bg-aero-800 border border-aero-700 text-slate-300 hover:bg-aero-700">Re-seed Particles</button></div>
 <label class="flex items-center justify-between text-xs bg-aero-950/80 p-2.5 rounded-lg border border-aero-700"><span><span class="text-white font-medium">Pentagon defect</span><br><span class="text-[10px] text-slate-400">NE tile → 5-port defect (1 of 12 on a closed icosphere)</span></span><input type="checkbox" id="chk-pent" class="w-4 h-4 accent-amber-500" onchange="buildPatch()"></label>
 <label class="flex items-center justify-between text-xs bg-aero-950/80 p-2.5 rounded-lg border border-aero-700"><span><span class="text-white font-medium">Show particles</span><br><span class="text-[10px] text-slate-400">3,200 precursor particles, centre tile</span></span><input type="checkbox" id="chk-part" class="w-4 h-4 accent-cyan-500" checked></label>
@@ -92,7 +101,7 @@ h1{font-size:16px;margin:0}h2{font-size:12px;margin:0}p{margin:0}</style></head>
 <div id="toast" class="fixed bottom-4 right-4 z-50 hidden bg-aero-800 border border-cyan-500 text-white px-4 py-2.5 rounded-lg text-xs font-mono"></div>
 <script>
 const MATS={cnt:{rho:1e-5,mu:1.05,color:'#06b6d4',name:'CNT'},cu:{rho:1.68e-8,mu:0.999,color:'#f97316',name:'Cu'},femg:{rho:1.3e-6,mu:8500,color:'#f59e0b',name:'Fe-MG'}};
-const S={freq:640,N:3,M:5,widthUm:45,spacingUm:60,mode:'patch',tiles:[],coils:[],particles:[],viol:[],pulseSel:[],pulse:null,pulseT:0,W:0,H:0,R:0};
+const S={freq:640,N:3,M:5,widthUm:45,spacingUm:800,mode:'patch',tiles:[],coils:[],particles:[],viol:[],pulseSel:[],pulse:null,pulseT:0,W:0,H:0,R:0};
 const cv=document.getElementById('cv'),ctx=cv.getContext('2d');
 function log(m,c){const el=document.getElementById('log');const d=document.createElement('div');if(c)d.className=c;d.textContent='['+new Date().toTimeString().slice(0,8)+'] '+m;el.prepend(d);while(el.children.length>40)el.lastChild.remove();}
 function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.remove('hidden');setTimeout(()=>t.classList.add('hidden'),2600);}
@@ -115,7 +124,66 @@ function buildPatch(){
   S.tiles.forEach(extractTile);updateHandshakes();runHUD();
   document.getElementById('addr').textContent=`imbuuid://ico/shell-3/face-14/subhex-5?n=${S.N}&m=${S.M}&patch=7tile`;
 }
-function extractTile(t){
+function fieldVal(nx,ny,n,m,src){
+  const z=chladni(nx,ny,n,m);
+  if(src!=='gorkov')return Math.abs(z);
+  const e=0.03,gx=(chladni(nx+e,ny,n,m)-chladni(nx-e,ny,n,m))/(2*e),gy=(chladni(nx,ny+e,n,m)-chladni(nx,ny-e,n,m))/(2*e);
+  return z*z-0.6*(gx*gx+gy*gy)/40; // Gor'kov proxy: pressure term vs velocity term, plate-mode p~Z, v~grad Z (normalised)
+}
+function fieldSrc(){const el=document.getElementById('inp-field');return el?el.value:'chladni';}
+function vecMode(){const el=document.getElementById('inp-vec');return el?el.value:'zs';}
+// Zhang-Suen thinning on a binary grid (Uint8, w*h). Returns thinned grid.
+function zhangSuen(img,w,h){
+  const P=(x,y)=>(x<0||y<0||x>=w||y>=h)?0:img[y*w+x];
+  let changed=true,guard=0;
+  while(changed&&guard++<200){changed=false;
+    for(let step=0;step<2;step++){const del=[];
+      for(let y=1;y<h-1;y++)for(let x=1;x<w-1;x++){if(!img[y*w+x])continue;
+        const p2=P(x,y-1),p3=P(x+1,y-1),p4=P(x+1,y),p5=P(x+1,y+1),p6=P(x,y+1),p7=P(x-1,y+1),p8=P(x-1,y),p9=P(x-1,y-1);
+        const seq=[p2,p3,p4,p5,p6,p7,p8,p9];const B=seq.reduce((a,b)=>a+b,0);if(B<2||B>6)continue;
+        let A=0;for(let i=0;i<8;i++)if(seq[i]===0&&seq[(i+1)%8]===1)A++;if(A!==1)continue;
+        if(step===0){if(p2*p4*p6!==0)continue;if(p4*p6*p8!==0)continue;}else{if(p2*p4*p8!==0)continue;if(p2*p6*p8!==0)continue;}
+        del.push(y*w+x);}
+      if(del.length){changed=true;del.forEach(i=>img[i]=0);}}}
+  return img;
+}
+// Douglas-Peucker polyline simplification
+function dpSimplify(pts,eps){if(pts.length<3)return pts;
+  const keep=new Array(pts.length).fill(false);keep[0]=keep[pts.length-1]=true;
+  (function rec(a,b){let md=0,mi=-1;const A=pts[a],B=pts[b];
+    for(let i=a+1;i<b;i++){const d=segDist(pts[i],A,B);if(d>md){md=d;mi=i;}}
+    if(md>eps&&mi>0){keep[mi]=true;rec(a,mi);rec(mi,b);}})(0,pts.length-1);
+  return pts.filter((_,i)=>keep[i]);
+}
+function extractTileZS(t){
+  t.traces=[];t.nodes=[];
+  const res=56,src=fieldSrc(),cut=src==='gorkov'?0.02:0.14;
+  const stepPx=(t.R*2)/res,w=res,h=res,img=new Uint8Array(w*h);
+  const cellXY=(i,j)=>({x:t.cx-t.R+ (i+0.5)*stepPx, y:t.cy-t.R+(j+0.5)*stepPx});
+  for(let j=0;j<h;j++)for(let i=0;i<w;i++){const{x,y}=cellXY(i,j);
+    if(!insideHex(x,y,t.cx,t.cy,t.R*0.97))continue;
+    if(fieldVal((x-t.cx)/t.R,(y-t.cy)/t.R,t.n,t.m,src)<cut){img[j*w+i]=1;if((i+j)%2===0)t.nodes.push({x,y});}}
+  zhangSuen(img,w,h);
+  // vectorize: skeleton pixels -> graph chains between endpoints/junctions
+  const key=(i,j)=>j*w+i, skel=new Set();for(let j=0;j<h;j++)for(let i=0;i<w;i++)if(img[j*w+i])skel.add(key(i,j));
+  const nbrs=(i,j)=>{const out=[];for(let dj=-1;dj<=1;dj++)for(let di=-1;di<=1;di++){if(!di&&!dj)continue;if(skel.has(key(i+di,j+dj)))out.push([i+di,j+dj]);}return out;};
+  const deg=new Map();skel.forEach(k=>{const i=k%w,j=(k/w)|0;deg.set(k,nbrs(i,j).length);});
+  const visitedEdge=new Set();const ekey=(a,b)=>a<b?a+'_'+b:b+'_'+a;
+  function walk(si,sj){const chain=[[si,sj]];let pi=-1,pj=-1,ci=si,cj=sj;
+    while(true){const ns=nbrs(ci,cj).filter(([a,b])=>!(a===pi&&b===pj)&&!visitedEdge.has(ekey(key(ci,cj),key(a,b))));
+      if(!ns.length)break;const[a,b]=ns[0];visitedEdge.add(ekey(key(ci,cj),key(a,b)));chain.push([a,b]);pi=ci;pj=cj;ci=a;cj=b;
+      if(deg.get(key(ci,cj))!==2)break;if(ci===si&&cj===sj)break;}
+    return chain;}
+  const chains=[];
+  skel.forEach(k=>{const i=k%w,j=(k/w)|0;if(deg.get(k)!==2){nbrs(i,j).forEach(([a,b])=>{if(!visitedEdge.has(ekey(k,key(a,b)))){const c=walk(i,j);if(c.length>1)chains.push(c);}});}});
+  skel.forEach(k=>{const i=k%w,j=(k/w)|0;const ns=nbrs(i,j);if(ns.some(([a,b])=>!visitedEdge.has(ekey(k,key(a,b))))){const c=walk(i,j);if(c.length>2)chains.push(c);}});
+  chains.forEach(c=>{let pts=c.map(([i,j])=>cellXY(i,j));
+    pts=dpSimplify(pts,1.6);
+    let len=0;for(let i=1;i<pts.length;i++)len+=Math.hypot(pts[i].x-pts[i-1].x,pts[i].y-pts[i-1].y);
+    if(pts.length>=2&&len>=9){snapPorts(t,pts);t.traces.push({pts,tile:t.id});}});
+}
+function extractTile(t){ if(vecMode()==='zs') extractTileZS(t); else extractTileGreedy(t); }
+function extractTileGreedy(t){
   t.traces=[];t.nodes=[];const grid=22,step=(t.R*1.75)/grid,cut=0.13;
   const nodes=[];
   for(let gx=-grid/2;gx<=grid/2;gx++)for(let gy=-grid/2;gy<=grid/2;gy++){
@@ -159,11 +227,19 @@ function runDRC(){const trs=allTraces();const pxPerUm=(S.R*2)/(50*1000)*1000; //
  const minPx=S.spacingUm*umPerPx/1000*1000/1000* (1000/ (1000/pxPerMm)) ; const minDistPx=S.spacingUm/ (1000/pxPerMm);
  let spacing=0,shorts=0,coilClr=0;S.viol=[];
  // spacing + shorts: sample points of distinct traces
- const samples=trs.map(tr=>tr.pts.filter((_,i)=>i%2===0));
  for(let i=0;i<trs.length;i++)for(let j=i+1;j<trs.length;j++){
+   const A=trs[i].pts,B=trs[j].pts;
+   // joined at a skeleton junction / shared endpoint = one net, not a violation
+   const endsA=[A[0],A[A.length-1]],endsB=[B[0],B[B.length-1]];
+   let joined=false;
+   for(const e of endsA)for(const q of B)if(Math.hypot(e.x-q.x,e.y-q.y)<3.5)joined=true;
+   for(const e of endsB)for(const q of A)if(Math.hypot(e.x-q.x,e.y-q.y)<3.5)joined=true;
+   if(joined)continue;
    let mn=1e9,mp=null,mq=null;
-   for(const p of samples[i])for(const q of samples[j]){const d=Math.hypot(p.x-q.x,p.y-q.y);if(d<mn){mn=d;mp=p;mq=q;}}
-   if(mn<2.5){shorts++;S.viol.push({x:(mp.x+mq.x)/2,y:(mp.y+mq.y)/2,k:'SHORT'});}
+   for(const p of A)for(const q of B){const d=Math.hypot(p.x-q.x,p.y-q.y);if(d<mn){mn=d;mp=p;mq=q;}}
+   // a short is a crossing of interiors; touching at endpoints was handled above
+   const isEnd=(tr,pt)=>pt===tr.pts[0]||pt===tr.pts[tr.pts.length-1];
+   if(mn<2.5&&!isEnd(trs[i],mp)&&!isEnd(trs[j],mq)){shorts++;S.viol.push({x:(mp.x+mq.x)/2,y:(mp.y+mq.y)/2,k:'SHORT'});}
    else if(mn<minDistPx){spacing++;S.viol.push({x:(mp.x+mq.x)/2,y:(mp.y+mq.y)/2,k:'SPACE '+Math.round(mn*(1000/pxPerMm))+'µm'});}}
  // coil clearance: coil vs traces not passing through it, coil-coil
  for(const c of S.coils){for(const tr of trs){let mn=1e9;for(let i=1;i<tr.pts.length;i++)mn=Math.min(mn,segDist(c,tr.pts[i-1],tr.pts[i]));if(mn>13&&mn<22){coilClr++;S.viol.push({x:c.x,y:c.y,k:'COIL-CLR'});break;}}}
@@ -172,9 +248,25 @@ function runDRC(){const trs=allTraces();const pxPerUm=(S.R*2)/(50*1000)*1000; //
  document.getElementById('drc-out').innerHTML=
   `<div class="${pass?'text-emerald-400':'text-red-400'} font-bold">${pass?'✓ DRC CLEAN':'✗ DRC: '+S.viol.length+' violations'}</div>`+
   `<div>· min-spacing (&lt;${S.spacingUm}µm): <span class="text-white">${spacing}</span></div><div>· trace–trace shorts: <span class="text-white">${shorts}</span></div><div>· coil clearance: <span class="text-white">${coilClr}</span></div>`+
-  `<div class="text-slate-500">scale: ${pxPerMm.toFixed(2)} px/mm · checked ${trs.length} traces, ${S.coils.length} coils. Violations ringed red on canvas.</div>`;
+  `<div class="text-slate-500">scale: ${pxPerMm.toFixed(2)} px/mm (1 px ≈ ${Math.round(1000/pxPerMm)} µm — spacing rules below that are sub-resolution) · spacing rule = ${minDistPx.toFixed(1)} px · checked ${trs.length} traces, ${S.coils.length} coils. Junction-joined traces count as one net. Violations ringed red on canvas.</div>`;
+ const cmp=compareExtractors();
+ document.getElementById('drc-out').innerHTML+=`<div class="pt-1 mt-1 border-t border-aero-700 text-slate-300">EXTRACTOR RECEIPT — greedy v5: ${cmp.grTraces} traces, <span class="text-red-400">${cmp.grShorts} shorts</span> · Zhang–Suen v6: ${cmp.zsTraces} traces, <span class="${cmp.zsShorts===0?'text-emerald-400':'text-red-400'}">${cmp.zsShorts} shorts</span> (junctions are nodes, not shorts)</div>`;
  log('DRC run: spacing='+spacing+' shorts='+shorts+' coil='+coilClr, pass?'text-emerald-400':'text-red-400');}
 function clearDRC(){S.viol=[];document.getElementById('drc-out').textContent='DRC cleared.';}
+function countShorts(trs){let n=0;
+ for(let i=0;i<trs.length;i++)for(let j=i+1;j<trs.length;j++){const A=trs[i].pts,B=trs[j].pts;
+  const endsA=[A[0],A[A.length-1]],endsB=[B[0],B[B.length-1]];let joined=false;
+  for(const e of endsA)for(const q of B)if(Math.hypot(e.x-q.x,e.y-q.y)<3.5)joined=true;
+  for(const e of endsB)for(const q of A)if(Math.hypot(e.x-q.x,e.y-q.y)<3.5)joined=true;
+  if(joined)continue;
+  let mn=1e9,mp=null,mq=null;
+  for(const a of A)for(const b of B){const d=Math.hypot(a.x-b.x,a.y-b.y);if(d<mn){mn=d;mp=a;mq=b;}}
+  const isEnd=(tr,pt)=>pt===tr.pts[0]||pt===tr.pts[tr.pts.length-1];
+  if(mn<2.5&&!isEnd(trs[i],mp)&&!isEnd(trs[j],mq))n++;}return n;}
+function compareExtractors(){ // run BOTH extractors on clones of the live tiles, count shorts — the v5 vs v6 receipt
+ const mk=fn=>S.tiles.map(t=>{const c={...t,traces:[],nodes:[],ports:t.ports,verts:t.verts};fn(c);return c;});
+ const zs=mk(extractTileZS).flatMap(t=>t.traces), gr=mk(extractTileGreedy).flatMap(t=>t.traces);
+ return {zsTraces:zs.length, zsShorts:countShorts(zs), grTraces:gr.length, grShorts:countShorts(gr)};}
 // ---------- pulse graph ----------
 function buildGraph(){const nodes=[],edges=[];const key=new Map();
  function nid(x,y){const k=Math.round(x/6)+','+Math.round(y/6);if(key.has(k))return key.get(k);const id=nodes.length;nodes.push({x,y});key.set(k,id);return id;}
@@ -226,7 +318,7 @@ function layerCanvas(layer){const S2=1024,oc=document.createElement('canvas');oc
  g.restore();return oc;}
 function dl(canvas,name){const a=document.createElement('a');a.download=name;a.href=canvas.toDataURL('image/png');a.click();}
 function exportAllLayers(){dl(layerCanvas(1),'ISM-SCS_L1_CNT_scaffold.png');setTimeout(()=>dl(layerCanvas(2),'ISM-SCS_L2_Cu_FeMG.png'),350);setTimeout(()=>dl(layerCanvas(3),'ISM-SCS_L3_aerogel_channels.png'),700);toast('Exported L1/L2/L3 masks — centre tile, 1024².');log('Exported 3-layer mask stack (PNG ×3)');}
-function exportStackJSON(){const data={schema:'ISM-SCS-CADCAM-v5',ts:new Date().toISOString(),imbuuid:document.getElementById('addr').textContent,acoustic:{freqHz:S.freq,N:S.N,M:S.M},rules:{widthUm:S.widthUm,spacingUm:S.spacingUm},tiles:S.tiles.map(t=>({id:t.id,q:t.q,r:t.r,sides:t.sides,n:t.n,m:t.m,traces:t.traces.length,ports:t.ports.map((p,i)=>({edge:i,x:+p.x.toFixed(1),y:+p.y.toFixed(1)}))})),coils:S.coils.map(c=>({x:+c.x.toFixed(1),y:+c.y.toFixed(1),bit:c.bit||0})),drc:{violations:S.viol},pulse:S.pulse?{lenMm:+S.pulse.lenMm.toFixed(2),R:+S.pulse.R.toFixed(4),Vdrop:+S.pulse.V.toFixed(4),heatMw:+S.pulse.P.toFixed(2)}:null};
+function exportStackJSON(){const data={schema:'ISM-SCS-CADCAM-v6',ts:new Date().toISOString(),imbuuid:document.getElementById('addr').textContent,acoustic:{freqHz:S.freq,N:S.N,M:S.M},rules:{widthUm:S.widthUm,spacingUm:S.spacingUm},tiles:S.tiles.map(t=>({id:t.id,q:t.q,r:t.r,sides:t.sides,n:t.n,m:t.m,traces:t.traces.length,ports:t.ports.map((p,i)=>({edge:i,x:+p.x.toFixed(1),y:+p.y.toFixed(1)}))})),coils:S.coils.map(c=>({x:+c.x.toFixed(1),y:+c.y.toFixed(1),bit:c.bit||0})),drc:{violations:S.viol},pulse:S.pulse?{lenMm:+S.pulse.lenMm.toFixed(2),R:+S.pulse.R.toFixed(4),Vdrop:+S.pulse.V.toFixed(4),heatMw:+S.pulse.P.toFixed(2)}:null};
  const a=document.createElement('a');a.download='ISM-SCS_patch_stack.json';a.href='data:application/json;charset=utf-8,'+encodeURIComponent(JSON.stringify(data,null,2));a.click();log('Exported stack JSON');}
 </script>
 <script>
