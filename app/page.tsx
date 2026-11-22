@@ -57,6 +57,7 @@ export default function Home() {
           <span className="warn">COMPONENTS: TRL 3–5</span>
           <span className="warn">INTEGRATED SKIN: TRL 1–2</span>
           <span className="faint">SOMACOSF</span>
+          <a href="/cad-cam.html" style={{ color: 'var(--fg)', fontWeight: 600, textDecoration: 'none' }}>CAD/CAM ENGINE →</a>
         </div>
       </header>
 
@@ -436,6 +437,40 @@ export default function Home() {
             <li><span className="tag ok">REF</span><span data-ref="aerogel">Heteroatom-doped reduced-graphene-oxide aerogel (N,S- vs N,P-co-doped variants, "rGO-NS" / "rGO-NP"), radar-infrared compatible stealth — the study whose graphical abstract appears in the Figures, reporting EAB<sub>max</sub> 8.06 GHz and RL<sub>min</sub> −64.82 dB on the abstract itself. <b>Citation status: the paper has not yet been identified</b> — an exact-figure and label search across Crossref and the open web (2026-11-18) found no match, so the figures are quoted as the abstract's own claims, not as a verified citation. Identification is an open task, not a detail.</span></li>
             <li><span className="tag warn">NOTE</span>Design tokens: monohud (MIT, © 2026 Joshua Guo). Spatial IDs on this page are PROVISIONAL, derived from coordinates under the SoMaCo UUID protocol.</li>
           </ul>
+        </div>
+      </section>
+
+      <section className="brief">
+        <h2>§11 · THE CAD/CAM ENGINE — FROM BRIEF TO MANUFACTURING FILE</h2>
+        <p className="lede">
+          The brief above is the argument; the CAD/CAM engine is the instrument that turns it into
+          manufacturing files. It converges the two earlier single-file prototypes — the ISM-SCS
+          hull simulator (v4.2) and the Cymatic Chladni &amp; Material Circuit Engine — into one
+          workstation, and it runs entirely in the browser:
+        </p>
+        <div className="two-col">
+          <div className="panel">
+            <h3>What it does</h3>
+            <ul className="tight">
+              <li><b>Multi-tile GeoHex patch editor.</b> Centre hex + 6 neighbours, each running a rotated Chladni mode (N,M offset by axial coordinate), with edge-port <i>imbuuid</i> handshake verification across every shared edge — plus pentagon-defect handling for the 12 topological defect tiles.</li>
+              <li><b>Skeleton extraction + DRC.</b> The particle density field is chained into vector traces, then checked: minimum trace spacing, trace–trace shorts, Fe-MG coil clearance. Violations are ringed on the canvas, not hidden.</li>
+              <li><b>Tomographic mask stack.</b> A Radon sinogram of the trace field (the CAL input form) and a 3-layer export — L1 CNT scaffold, L2 Cu/Fe-MG core-memory, L3 inverse aerogel infiltration channels — as print-ready PNG masks plus a GeoHex netlist JSON.</li>
+              <li><b>Transient core-memory pulse.</b> Click two edge ports: the pulse routes over the extracted mycelial graph with per-segment voltage drop and Joule heating, and Fe-MG coils near the path flip hysteresis state — the write event, simulated on the real extracted topology.</li>
+            </ul>
+          </div>
+          <div className="panel">
+            <h3>Measured on the instrument itself</h3>
+            <ul className="tight">
+              <li><span className="tag ok">MEASURED</span>Edge-port handshakes at default modes (N3 M5, 640 Hz): 6 of 12 shared edges PASS — both tiles land a trace endpoint on the shared port; the 6 open edges name the side with no trace. Continuity is a measurement, not an assumption.</li>
+              <li><span className="tag ok">MEASURED</span>Pulse, centre tile port e0→e3, Cu at 120 mA: path 90.4 mm, R 1.88 Ω, drop 225 mV, Joule heat 27.0 mW. A 45×18 µm trace is genuinely that resistive — the number is the physics, not a rendering.</li>
+              <li><span className="tag warn">KNOWN LIMIT</span>DRC at defaults reports 17 trace-crossing shorts in the chained skeleton. The skeletoniser is greedy-chain (v4 lineage), not a true medial-axis transform — the shorts are the receipt, and the medial-axis pass is the next iteration.</li>
+              <li><span className="tag warn">KNOWN LIMIT</span>The sinogram is a Radon projection of the 2D vector trace field — the correct input form for CAL dose planning, not a voxel CT reconstruction of a printed part.</li>
+            </ul>
+            <p style={{ marginBottom: 0 }}>
+              <a href="/cad-cam.html" style={{ color: 'var(--fg)', fontWeight: 600 }}>Open the CAD/CAM Engine →</a>
+              <span className="faint"> · single file, no build step, no server state — the same file that is developed locally is the file that ships.</span>
+            </p>
+          </div>
         </div>
       </section>
 
