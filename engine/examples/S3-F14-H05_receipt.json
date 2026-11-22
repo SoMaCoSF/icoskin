@@ -1,0 +1,15 @@
+{
+ "imbuuid": "S3:F14:H05",
+ "mode_n": 5,
+ "mode_m": 3,
+ "freq_hz": 432.0,
+ "field_fix": "raw eigenmode superposition (ism_scs_field_fix.py)",
+ "skeleton_px": 3541,
+ "core_nodes": 24,
+ "sinogram_shape": [
+  512,
+  180
+ ],
+ "spice_lines": 55,
+ "compile_time_s": 2.03
+}

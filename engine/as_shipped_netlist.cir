@@ -1,0 +1,9 @@
+* ISM-SCS SPICE Netlist for Tile S3:F14:H05
+* Normal Vector: (0.577, 0.577, 0.577)
+.model FeMG_Core CORE(H_c=1.8 B_sat=1.56 B_rem=1.12 Area=1.2e-9 Path=1.5e-4)
+
+
+* Test Pulse Injection (Port 0 -> Port 1)
+V_pulse N_0 0 PULSE(0 3.3 1n 0.2n 0.2n 5n 20n)
+.tran 0.1n 50n
+.end

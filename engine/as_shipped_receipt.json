@@ -1,0 +1,26 @@
+{
+ "imbuuid": "S3:F14:H05",
+ "resolution": 512,
+ "potential": {
+  "min": 0.0,
+  "max": 0.9114417273993594,
+  "mean_inside_hex": 0.07150555375302722,
+  "frac_above_0.72": 0.0038909912109375
+ },
+ "skeleton_px": 348,
+ "core_nodes": 0,
+ "core_node_sample": [],
+ "sinogram_shape": [
+  512,
+  180
+ ],
+ "sinogram_max": 254,
+ "spice_lines": 9,
+ "timing_s": {
+  "field": 0.06,
+  "graph": 0.01,
+  "spice": 0.0,
+  "sinogram": 1.59,
+  "total": 1.65
+ }
+}

@@ -1,0 +1,55 @@
+* ISM-SCS SPICE Netlist for Tile S3:F14:H05
+* Normal Vector: (0.577, 0.577, 0.577)
+.model FeMG_Core CORE(H_c=1.8 B_sat=1.56 B_rem=1.12 Area=1.2e-9 Path=1.5e-4)
+
+R_trace_0 N_0 N_0_mid 442.712
+L_core_0 N_0_mid N_1 2.4uH
+R_trace_1 N_1 N_1_mid 605.913
+L_core_1 N_1_mid N_2 2.4uH
+R_trace_2 N_2 N_2_mid 324.653
+L_core_2 N_2_mid N_3 2.4uH
+R_trace_3 N_3 N_3_mid 119.792
+L_core_3 N_3_mid N_4 2.4uH
+R_trace_4 N_4 N_4_mid 324.653
+L_core_4 N_4_mid N_5 2.4uH
+R_trace_5 N_5 N_5_mid 612.85
+L_core_5 N_5_mid N_6 2.4uH
+R_trace_6 N_6 N_6_mid 8.681
+L_core_6 N_6_mid N_7 2.4uH
+R_trace_7 N_7 N_7_mid 435.764
+L_core_7 N_7_mid N_8 2.4uH
+R_trace_8 N_8 N_8_mid 10.417
+L_core_8 N_8_mid N_9 2.4uH
+R_trace_9 N_9 N_9_mid 475.542
+L_core_9 N_9_mid N_10 2.4uH
+R_trace_10 N_10 N_10_mid 442.708
+L_core_10 N_10_mid N_11 2.4uH
+R_trace_11 N_11 N_11_mid 230.38
+L_core_11 N_11_mid N_12 2.4uH
+R_trace_12 N_12 N_12_mid 227.808
+L_core_12 N_12_mid N_13 2.4uH
+R_trace_13 N_13 N_13_mid 442.708
+L_core_13 N_13_mid N_14 2.4uH
+R_trace_14 N_14 N_14_mid 469.601
+L_core_14 N_14_mid N_15 2.4uH
+R_trace_15 N_15 N_15_mid 440.972
+L_core_15 N_15_mid N_16 2.4uH
+R_trace_16 N_16 N_16_mid 605.905
+L_core_16 N_16_mid N_17 2.4uH
+R_trace_17 N_17 N_17_mid 324.653
+L_core_17 N_17_mid N_18 2.4uH
+R_trace_18 N_18 N_18_mid 118.056
+L_core_18 N_18_mid N_19 2.4uH
+R_trace_19 N_19 N_19_mid 326.389
+L_core_19 N_19_mid N_20 2.4uH
+R_trace_20 N_20 N_20_mid 611.114
+L_core_20 N_20_mid N_21 2.4uH
+R_trace_21 N_21 N_21_mid 444.458
+L_core_21 N_21_mid N_22 2.4uH
+R_trace_22 N_22 N_22_mid 439.24
+L_core_22 N_22_mid N_23 2.4uH
+
+* Test Pulse Injection (Port 0 -> Port 1)
+V_pulse N_0 0 PULSE(0 3.3 1n 0.2n 0.2n 5n 20n)
+.tran 0.1n 50n
+.end
