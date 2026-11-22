@@ -57,7 +57,7 @@ export default function Home() {
           <span className="warn">COMPONENTS: TRL 3–5</span>
           <span className="warn">INTEGRATED SKIN: TRL 1–2</span>
           <span className="faint">SOMACOSF</span>
-          <a href="/cad-cam.html" style={{ color: 'var(--fg)', fontWeight: 600, textDecoration: 'none' }}>CAD/CAM ENGINE →</a>
+          <a href="/cad-cam" style={{ color: 'var(--fg)', fontWeight: 600, textDecoration: 'none' }}>CAD/CAM ENGINE →</a>
         </div>
       </header>
 
@@ -467,7 +467,7 @@ export default function Home() {
               <li><span className="tag warn">KNOWN LIMIT</span>The sinogram is a Radon projection of the 2D vector trace field — the correct input form for CAL dose planning, not a voxel CT reconstruction of a printed part.</li>
             </ul>
             <p style={{ marginBottom: 0 }}>
-              <a href="/cad-cam.html" style={{ color: 'var(--fg)', fontWeight: 600 }}>Open the CAD/CAM Engine →</a>
+              <a href="/cad-cam" style={{ color: 'var(--fg)', fontWeight: 600 }}>Open the CAD/CAM Engine →</a>
               <span className="faint"> · single file, no build step, no server state — the same file that is developed locally is the file that ships.</span>
             </p>
           </div>

@@ -2,14 +2,14 @@
 # icoskin
 Icospheric Multi-Shell Smart Compute Skin — funding explorer and interactive simulator for spatially addressed Fe-BMG sensing skin
 
-Live: https://icoskin.somacosf.com/ · CAD/CAM engine: https://icoskin.somacosf.com/cad-cam.html
+Live: https://icoskin.somacosf.com/ · CAD/CAM engine: https://icoskin.somacosf.com/cad-cam
 
 ## Surfaces
 
 | Surface | Source | What it is |
 |---|---|---|
 | `/` (materials brief) | `app/page.tsx`, `app/Simulator.tsx`, `app/Chladni.tsx`, `lib/ico.ts` | The graded brief: topology math (§1), layers (§2), claim boundary (§3), work packages (§4), fabrication (§5), cymatic mask (§6), core memory (§7), particle sensing (§8), the ask (§9), references (§10), CAD/CAM (§11) |
-| `/cad-cam.html` (engine) | `public/cad-cam.html` — single file, no build step | ISM-SCS CAD/CAM Engine v5: the manufacturing workstation the brief's §11 documents |
+| `/cad-cam` (engine) | `public/cad-cam.html` — single file, no build step | ISM-SCS CAD/CAM Engine v5: the manufacturing workstation the brief's §11 documents |
 
 ## CAD/CAM Engine v5 — module map
 
@@ -57,4 +57,4 @@ Deploy is git-linked: commit + push to `main`, then `deploy.py` creates the prod
 
 ## Iteration log
 
-- **2026-11-22 · v5 convergence** — CAD/CAM Engine v5 built from the two uploaded posters + v4 prototypes, verified in headless Chrome (zero page errors; pulse/DRC/sinogram/handshakes driven programmatically), converged into this repo as `public/cad-cam.html`, brief gained §11 + header link, engine gained a back-link to the brief. The engine also carries a fallback layout stylesheet, so it renders correctly even where the Tailwind CDN is unreachable.
+- **2026-11-22 · v5 convergence** — CAD/CAM Engine v5 built from the two uploaded posters + v4 prototypes, verified in headless Chrome (zero page errors; pulse/DRC/sinogram/handshakes driven programmatically), converged into this repo as `public/cad-cam.html` (served at `/cad-cam`), brief gained §11 + header link, engine gained a back-link to the brief. The engine also carries a fallback layout stylesheet, so it renders correctly even where the Tailwind CDN is unreachable.
